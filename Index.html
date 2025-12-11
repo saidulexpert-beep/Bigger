@@ -15,17 +15,15 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8f8f8;
             color: #333333;
-            /* ব্যবহারকারী যেন টেক্সট সিলেক্ট করতে না পারে তার জন্য কোড */
-            -webkit-user-select: none; /* Safari */
-            -ms-user-select: none; /* IE 10+ */
-            user-select: none; /* Standard syntax */
-            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
-        /* ইনপুট এবং নির্দিষ্ট কিছু জায়গায় সিলেকশন চালু রাখার জন্য কোড */
-        input, textarea, #mail-details-content, #mail-purchase-history .font-mono {
-            -webkit-user-select: text; /* Safari */
-            -ms-user-select: text; /* IE 10+ */
-            user-select: text; /* Standard syntax */
+        input, textarea, #mail-details-content, #mail-purchase-history .font-mono, .selectable-text {
+            -webkit-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
             -webkit-touch-callout: default;
         }
         .card-bg {
@@ -112,7 +110,6 @@
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Banner & Marquee */
         .banner-wrapper { position: relative; width: 100%; padding-top: 56.25%; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
         .banner-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1); }
         .slide { min-width: 100%; position: relative; }
@@ -121,7 +118,6 @@
         .dot { display: inline-block; height: 8px; width: 8px; margin: 0 4px; background: #bbb; border-radius: 50%; cursor: pointer; transition: background 0.3s; }
         .dot.active { background: #007bff; }
 
-        /* UPDATED Premium Loader Styles */
         #loader { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.5rem; transition: opacity 0.5s ease; }
         #loader .logo-container { animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards, breath 2.5s ease-in-out infinite 1s; }
         #loader .loader-text { animation: fadeInText 1s ease-in-out 0.5s forwards; opacity: 0; font-weight: bold; font-size: 1.5rem; }
@@ -130,11 +126,9 @@
         @keyframes fadeInText { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes breath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-        /* Review Card */
         .review-card-new { background-color: #f9f9f9; border: 1px solid #eee; }
         .star-rating i { color: #facc15; }
 
-        /* UPDATED Spinner for Loading */
         .premium-loader-spinner {
             width: 56px;
             height: 56px;
@@ -143,148 +137,52 @@
             -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 9px), #000 0);
             animation: spin 1s infinite linear;
         }
-        .loading-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2.5rem;
-        }
-        @keyframes spin {
-            to { transform: rotate(1turn); }
-        }
+        .loading-container { display: flex; justify-content: center; align-items: center; padding: 2.5rem; }
+        @keyframes spin { to { transform: rotate(1turn); } }
 
-        /* New Modal Close Button Style */
-        .modal-close-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background-color: #e5e7eb;
-            color: #4b5563;
-            border-radius: 9999px;
-            padding: 4px;
-            transition: background-color 0.2s;
-            cursor: pointer;
-        }
-        .modal-close-btn:hover {
-            background-color: #d1d5db;
-        }
+        .modal-close-btn { position: absolute; top: 12px; right: 12px; background-color: #e5e7eb; color: #4b5563; border-radius: 9999px; padding: 4px; transition: background-color 0.2s; cursor: pointer; }
+        .modal-close-btn:hover { background-color: #d1d5db; }
 
-        /* NEW: Notification Badge */
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: #ef4444;
-            color: white;
-            border-radius: 9999px;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid white;
-        }
+        .notification-badge { position: absolute; top: -5px; right: -5px; background-color: #ef4444; color: white; border-radius: 9999px; width: 20px; height: 20px; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
 
-        /* --- NEW: Slide-Out Menu Styles --- */
-        #menu-overlay {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 80;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        #menu-overlay.open {
-            opacity: 1;
-            visibility: visible;
-        }
-        #slide-out-menu {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 80%;
-            max-width: 320px;
-            background: #ffffff;
-            z-index: 90;
-            transform: translateX(-100%);
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-        #slide-out-menu.open {
-            transform: translateX(0);
-        }
-        .menu-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e5e7eb;
-            text-align: center;
-        }
+        /* Slide-Out Menu & Updated Support Buttons */
+        #menu-overlay { position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 80; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        #menu-overlay.open { opacity: 1; visibility: visible; }
+        #slide-out-menu { position: fixed; top: 0; left: 0; bottom: 0; width: 80%; max-width: 320px; background: #ffffff; z-index: 90; transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        #slide-out-menu.open { transform: translateX(0); }
+        .menu-header { padding: 1.5rem; border-bottom: 1px solid #e5e7eb; text-align: center; }
+        
+        /* IMPROVED SUPPORT BUTTONS GRID */
+        .support-grid { display: grid; grid-template-columns: 1fr; gap: 12px; padding: 16px; }
         .support-link-card {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px;
-            border-bottom: 1px solid #e5e7eb;
-            text-decoration: none;
-            color: #111827;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.2s ease-in-out;
+            display: flex; align-items: center; gap: 16px; padding: 16px; 
+            background: linear-gradient(145deg, #ffffff, #f3f4f6);
+            border: 1px solid #e5e7eb; border-radius: 12px;
+            text-decoration: none; color: #1f2937; font-weight: 600; font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .support-link-card:hover {
-            background-color: #f9fafb;
+            transform: translateY(-2px);
+            border-color: #007bff;
+            background: #f0f9ff;
             color: #007bff;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
         }
-        .support-link-card img, .support-link-card .icon-placeholder {
-            width: 32px;
-            height: 32px;
-        }
+        .support-link-card img { width: 40px; height: 40px; border-radius: 50%; padding: 4px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-        /* NEW: Mail Page View Switcher */
-        .mail-view-switcher {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            background-color: #e5e7eb;
-            padding: 0.5rem;
-            border-radius: 0.75rem;
-        }
-        .mail-view-switcher button {
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            color: #4b5563;
-            transition: all 0.3s ease;
-            border: none;
-            background-color: transparent;
-        }
-        .mail-view-switcher button.active {
-            background-color: #ffffff;
-            color: #007bff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
+        .mail-view-switcher { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; background-color: #e5e7eb; padding: 0.5rem; border-radius: 0.75rem; }
+        .mail-view-switcher button { padding: 0.75rem; border-radius: 0.5rem; font-weight: 600; color: #4b5563; transition: all 0.3s ease; border: none; background-color: transparent; }
+        .mail-view-switcher button.active { background-color: #ffffff; color: #007bff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 
-        /* --- UPDATED & FIXED CSS for Mail Views --- */
-        #mail-views-container {
-            position: relative;
-            overflow: hidden;
-            /* The height will be set by JavaScript to match the active content */
-            transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .mail-view {
-            width: 100%;
-            /* Removed 'position: absolute' to allow parent to calculate height */
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: absolute; /* Re-added with JS height management */
-            top: 0;
-            left: 0;
-        }
+        #mail-views-container { position: relative; overflow: hidden; transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mail-view { width: 100%; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: absolute; top: 0; left: 0; }
+
+        /* Report History Status */
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+        .status-pending { background-color: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; }
+        .status-approved { background-color: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
+        .status-rejected { background-color: #fef2f2; color: #b91c1c; border: 1px solid #fee2e2; }
 
     </style>
 </head>
@@ -306,14 +204,16 @@
             <h2 class="text-xl font-bold text-accent-gradient">Support Center</h2>
             <p class="text-sm text-gray-500 mt-1">যেকোনো প্রয়োজনে যোগাযোগ করুন</p>
         </div>
-        <nav id="support-channels-list" class="flex-grow overflow-y-auto">
-            </nav>
+        <nav id="support-channels-list" class="flex-grow overflow-y-auto support-grid">
+            <!-- Populated via JS -->
+        </nav>
         <div class="p-4 text-center text-xs text-gray-400 border-t">
             𝐌𝐀𝐈𝐋 𝐒𝐓𝐎𝐑𝐄 &copy; 2025
         </div>
     </aside>
+
     <div id="app-container" class="min-h-screen flex-col main-page">
-        <!-- =========== HEADER (UPDATED) =========== -->
+        <!-- =========== HEADER =========== -->
         <header class="header flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="relative">
@@ -336,8 +236,6 @@
                 </button>
             </div>
         </header>
-        <!-- =========== END OF HEADER =========== -->
-
 
         <main class="flex-grow pb-20">
             <div id="home-page" class="space-y-6 sub-page">
@@ -363,41 +261,25 @@
                 </div>
             </div>
             
-            <!-- =========== [UPDATED] DEPOSIT PAGE =========== -->
+            <!-- =========== NOTIFICATION PAGE (FULL SCREEN) =========== -->
+            <div id="notification-page" class="sub-page p-4 space-y-4">
+                <div class="relative flex items-center justify-center mb-4">
+                    <button onclick="navigateTo('home-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6 text-gray-700"></i>
+                    </button>
+                    <h2 class="text-xl font-bold text-center text-gray-800">Notifications</h2>
+                </div>
+                <div id="notification-list-full" class="space-y-3"></div>
+            </div>
+
+            <!-- =========== DEPOSIT PAGE =========== -->
             <div id="pay-page" class="p-4 space-y-6 sub-page">
                 <h2 class="text-2xl font-bold text-center text-accent-gradient">Deposit Center</h2>
-
                 <div class="card-bg p-5 rounded-2xl shadow-lg space-y-5 bg-gradient-to-br from-blue-50/50 to-white">
                     <div class="text-center">
                         <h3 class="font-semibold text-xl flex items-center justify-center gap-2 text-gray-800"><i data-lucide="credit-card" class="w-6 h-6 text-blue-500"></i><span>টাকা জমা দিন</span></h3>
                         <p class="text-sm text-gray-500 mt-1">আপনার পছন্দমত মাধ্যমে টাকা পাঠান</p>
                     </div>
-
-                    <!-- How to Deposit Steps -->
-                    <div class="space-y-3 pt-3">
-                         <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">1</div>
-                            <div>
-                                <h4 class="font-semibold text-gray-700">মাধ্যম বাছাই করুন</h4>
-                                <p class="text-sm text-gray-500">নিচের তালিকা থেকে আপনার পছন্দের মাধ্যম বেছে নিন।</p>
-                            </div>
-                        </div>
-                         <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">2</div>
-                            <div>
-                                <h4 class="font-semibold text-gray-700">সেন্ড মানি করুন</h4>
-                                <p class="text-sm text-gray-500">প্রদর্শিত নম্বরে আপনার কাঙ্খিত পরিমাণ টাকা <span class="font-bold text-red-600 bg-red-100 px-1 rounded">সেন্ড মানি (Send Money)</span> করুন।</p>
-                            </div>
-                        </div>
-                         <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">3</div>
-                            <div>
-                                <h4 class="font-semibold text-gray-700">ফর্ম পূরণ করুন</h4>
-                                <p class="text-sm text-gray-500">টাকা পাঠানোর পর Transaction ID সহ নিচের ফর্মটি সঠিকভাবে পূরণ করুন।</p>
-                            </div>
-                        </div>
-                    </div>
-
 
                     <div class="grid grid-cols-2 gap-4 pt-4">
                         <div class="bg-white p-3 rounded-lg text-center border hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md">
@@ -437,10 +319,9 @@
                 </div>
                 <div class="mt-6"><h3 class="text-lg font-semibold mb-3">Payment History</h3><div id="payment-history-list" class="space-y-3"></div></div>
             </div>
-            <!-- =========== END OF DEPOSIT PAGE =========== -->
 
 
-            <!-- =========== UPDATED MAIL PAGE =========== -->
+            <!-- =========== MAIL PAGE =========== -->
             <div id="mail-page" class="sub-page">
                 <div class="p-4 space-y-6">
                     <div class="mail-view-switcher">
@@ -465,28 +346,41 @@
                     </div>
                 </div>
             </div>
-            <!-- =========== END OF UPDATED MAIL PAGE =========== -->
 
-
-            <!-- =========== UPDATED UPDATES PAGE =========== -->
+            <!-- =========== UPDATES PAGE =========== -->
             <div id="updates-page" class="p-4 space-y-6 sub-page">
                 <h2 class="text-xl font-bold text-center text-gray-800">Latest Update</h2>
                 <div id="updates-content" class="space-y-4"></div>
-
                 <div class="mt-8">
                     <h3 class="text-lg font-semibold text-center mb-4 text-gray-800">Customer Reviews</h3>
                     <div id="reviews-list" class="space-y-4"></div>
                 </div>
             </div>
-            <!-- =========== END OF UPDATED UPDATES PAGE =========== -->
 
-
+            <!-- =========== TUTORIAL PAGE =========== -->
             <div id="tutorial-page" class="p-4 space-y-6 sub-page">
-                <h2 class="text-xl font-bold text-center text-gray-800">Tutorials</h2>
+                 <div class="relative flex items-center justify-center mb-4">
+                    <button onclick="navigateTo('profile-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6 text-gray-700"></i>
+                    </button>
+                    <h2 class="text-xl font-bold text-center text-gray-800">Tutorials</h2>
+                </div>
                 <p class="text-sm text-gray-600 text-center">নিচের তালিকা থেকে আপনার প্রয়োজনীয় ভিডিওটি দেখুন।</p>
                 <div id="tutorial-list" class="space-y-5"></div>
             </div>
 
+             <!-- =========== REPORT HISTORY PAGE =========== -->
+             <div id="report-history-page" class="p-4 space-y-6 sub-page">
+                <div class="relative flex items-center justify-center mb-4">
+                   <button onclick="navigateTo('profile-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
+                       <i data-lucide="arrow-left" class="w-6 h-6 text-gray-700"></i>
+                   </button>
+                   <h2 class="text-xl font-bold text-center text-gray-800">Report History</h2>
+               </div>
+               <div id="report-history-list" class="space-y-3"></div>
+           </div>
+
+            <!-- =========== PROFILE PAGE =========== -->
             <div id="profile-page" class="p-4 space-y-6 sub-page">
                 <div class="card-bg p-6 rounded-2xl flex flex-col items-center text-center">
                     <div class="relative mb-4">
@@ -499,6 +393,17 @@
                 </div>
 
                 <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <button id="profile-report-history-btn" class="card-bg p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
+                            <i data-lucide="clipboard-list" class="w-6 h-6 text-orange-500"></i>
+                            <span class="font-semibold text-sm">Report History</span>
+                        </button>
+                        <button id="profile-tutorial-btn" class="card-bg p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
+                            <i data-lucide="youtube" class="w-6 h-6 text-red-500"></i>
+                            <span class="font-semibold text-sm">Tutorials</span>
+                        </button>
+                    </div>
+
                     <button id="more-features-btn" class="w-full card-bg p-4 rounded-xl flex justify-between items-center text-left text-lg font-semibold">
                         <span>⚡ More Features</span>
                         <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400"></i>
@@ -511,7 +416,6 @@
                         <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400"></i>
                     </button>
                 </div>
-
 
                 <div class="text-center pt-6">
                      <p class="text-center text-gray-600 text-sm">Developed by <a href="https://t.me/bd_Storebot/Botshop" target="_blank" class="font-semibold text-[#007bff] hover:underline">𝐁𝐃 𝐒𝐓𝐎𝐑𝐄</a></p>
@@ -554,7 +458,6 @@
                     <button id="add-mails-btn" class="w-full p-3 rounded-lg btn-gradient">Add Mails to Stock</button>
                 </div>
 
-                <!-- NEW: Replace Requests Section for Admin -->
                 <div class="mt-8">
                     <h3 class="text-lg font-semibold mb-3 text-center">Replace Requests</h3>
                     <div id="replace-requests-list" class="space-y-3"></div>
@@ -636,16 +539,6 @@
         </div>
     </div>
 
-    <div id="notification-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[70] p-4 backdrop-blur-sm">
-        <div class="card-bg rounded-2xl p-6 w-full max-w-sm space-y-4">
-            <h3 class="text-xl font-bold text-center text-accent-gradient mb-4">Notifications</h3>
-            <div id="notification-list" class="space-y-3 max-h-80 overflow-y-auto">
-                </div>
-            <button id="notification-ok-btn" class="w-full p-3 rounded-lg btn-gradient mt-4">Close</button>
-        </div>
-    </div>
-
-
     <div id="deposit-details-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[70] p-4 backdrop-blur-sm">
         <div class="card-bg rounded-2xl p-6 w-full max-w-sm space-y-4">
             <h3 class="text-xl font-bold text-center text-accent-gradient mb-4">How to Deposit</h3>
@@ -712,7 +605,6 @@
         </div>
     </div>
     
-    <!-- [UPDATED] Report Issue Modal -->
     <div id="report-issue-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[70] p-4 backdrop-blur-sm">
         <div class="card-bg rounded-2xl p-6 w-full max-w-sm space-y-4 relative">
             <button onclick="document.getElementById('report-issue-modal').classList.add('hidden')" class="modal-close-btn">
@@ -751,7 +643,6 @@
 
     <script type="module">
         const ADMIN_UID = "6954647230";
-        // --- UPDATED FIREBASE CONFIG ---
         const firebaseConfig = {
             apiKey: "AIzaSyCoCy08FL_sHHdA0f2cJg0BaF-iYAhFuk0",
             authDomain: "mail-store-4692b.firebaseapp.com",
@@ -826,7 +717,6 @@
             }, 4000);
         }
         
-        // [UPDATED] User session initialization with unblocking logic
         async function initUserSession() {
             if (!currentUserTg) {
                 showAlert("Telegram user data is missing. Cannot proceed.");
@@ -839,7 +729,6 @@
             if (userSnap.exists()) {
                 userData = userSnap.data();
                 
-                // Check if user is currently blocked and if the block has expired
                 if (userData.isBlocked && userData.blockedUntil && userData.blockedUntil.toMillis() < Date.now()) {
                     await updateDoc(userRef, {
                         isBlocked: false,
@@ -848,7 +737,6 @@
                         photo_url: currentUserTg.photo_url || null,
                         lastSeen: serverTimestamp()
                     });
-                    // Re-fetch user data after unblocking
                     userSnap = await getDoc(userRef);
                     userData = userSnap.data();
                 } else {
@@ -870,8 +758,8 @@
                     balance: 0,
                     createdAt: serverTimestamp(),
                     isBlocked: false,
-                    blockedUntil: null, // For timed blocks
-                    dailyRejections: { date: new Date().toISOString().slice(0, 10), count: 0 }, // For tracking rejected reports
+                    blockedUntil: null, 
+                    dailyRejections: { date: new Date().toISOString().slice(0, 10), count: 0 }, 
                     lastSeenNotification: null,
                     linkedUsers: [], 
                     linkedBy: null, 
@@ -962,7 +850,9 @@
                 'features-page': loadFeaturesPage,
                 'tutorial-page': loadTutorials,
                 'link-team-page': loadLinkedFriends,
-                'send-page': () => { setupDynamicAmountHandlers('send'); }
+                'send-page': () => { setupDynamicAmountHandlers('send'); },
+                'notification-page': showNotifications,
+                'report-history-page': loadReportHistory
             };
             if (pageLoadFunctions[pageId]) pageLoadFunctions[pageId]();
             lucide.createIcons();
@@ -979,8 +869,10 @@
         function setupEventListeners() {
             document.querySelectorAll('.nav-link-premium[data-page]').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); navigateTo(link.dataset.page); }));
             document.getElementById('header-deposit-btn').addEventListener('click', () => navigateTo('pay-page'));
-            document.getElementById('notification-btn').addEventListener('click', showNotifications);
-            document.getElementById('notification-ok-btn').addEventListener('click', hideNotifications);
+            
+            // Updated Notification Listener to navigate to full page
+            document.getElementById('notification-btn').addEventListener('click', () => navigateTo('notification-page'));
+
             document.getElementById('deposit-btn').addEventListener('click', handleDepositRequest);
             document.getElementById('home-deposit-btn').addEventListener('click', () => navigateTo('pay-page'));
             document.getElementById('add-mails-btn').addEventListener('click', handleAddMails);
@@ -997,6 +889,10 @@
             document.getElementById('features-send-btn').addEventListener('click', () => navigateTo('send-page'));
             document.getElementById('submit-send-btn').addEventListener('click', handleSendRequest);
             document.getElementById('search-friend-btn').addEventListener('click', handleSearchFriend);
+
+            // New Profile Button Listeners
+            document.getElementById('profile-tutorial-btn').addEventListener('click', () => navigateTo('tutorial-page'));
+            document.getElementById('profile-report-history-btn').addEventListener('click', () => navigateTo('report-history-page'));
 
             document.getElementById('mail-details-ok-btn').addEventListener('click', () => { document.getElementById('mail-details-modal').classList.add('hidden'); });
             document.getElementById('close-insufficient-balance-modal').addEventListener('click', () => { document.getElementById('insufficient-balance-modal').classList.add('hidden'); });
@@ -1079,11 +975,9 @@
         }
 
         async function showNotifications() {
-            const modal = document.getElementById('notification-modal');
-            const listEl = document.getElementById('notification-list');
+            const listEl = document.getElementById('notification-list-full');
             listEl.innerHTML = getLoadingHTML();
-            modal.classList.remove('hidden');
-
+            
             const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"), limit(20));
             const snapshot = await getDocs(q);
 
@@ -1093,23 +987,26 @@
             });
 
             if (filteredDocs.length === 0) {
-                listEl.innerHTML = '<p class="text-center text-gray-500">No notifications yet.</p>';
+                listEl.innerHTML = '<p class="text-center text-gray-500 mt-10">No notifications yet.</p>';
             } else {
-                listEl.innerHTML = filteredDocs.slice(0, 10).map(doc => {
+                listEl.innerHTML = filteredDocs.map(doc => {
                     const item = doc.data();
                     const date = item.createdAt.toDate().toLocaleString('en-GB');
-                    return `<div class="p-3 bg-gray-50 rounded-lg">
-                        <p class="font-bold text-gray-800">${item.title}</p>
-                        <p class="text-sm text-gray-600">${item.message}</p>
-                        <p class="text-xs text-gray-400 text-right mt-2">${date}</p>
+                    return `<div class="card-bg p-4 rounded-xl shadow-sm">
+                        <div class="flex items-start gap-3">
+                             <div class="p-2 bg-blue-50 rounded-full"><i data-lucide="bell" class="w-5 h-5 text-blue-500"></i></div>
+                             <div>
+                                <h4 class="font-bold text-gray-800">${item.title}</h4>
+                                <p class="text-sm text-gray-600 mt-1">${item.message}</p>
+                                <p class="text-xs text-gray-400 mt-2">${date}</p>
+                             </div>
+                        </div>
                     </div>`;
                 }).join('');
+                lucide.createIcons();
             }
-        }
 
-
-        async function hideNotifications() {
-            document.getElementById('notification-modal').classList.add('hidden');
+            // Mark read
             const userRef = doc(db, "users", userData.tgChatId);
             const newTimestamp = Timestamp.now();
             await updateDoc(userRef, { lastSeenNotification: newTimestamp });
@@ -1195,7 +1092,6 @@
             } catch (error) { console.error(`Error getting stock count for ${collectionName}:`, error); return 0; }
         }
         
-        // [UPDATED] Mail rendering logic
         async function renderMailList(mails, containerEl, effectiveBalance) {
             if (!mails || mails.length === 0) {
                 containerEl.innerHTML = `<p class="text-center text-gray-500 pt-10">এই ক্যাটাগরিতে কোনো মেইল উপলব্ধ নেই।</p>`;
@@ -1214,7 +1110,6 @@
                 const validityTagHtml = (mail.expirationHours != null) ? `<span class="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">${mail.expirationHours}h validity</span>` : '';
                 const apiButtonHtml = mail.apiLink ? `<button onclick="openApiLink('${mail.apiLink}')" class="text-blue-600 font-semibold">API</button>` : '<span class="text-gray-400 font-semibold">API</span>';
                 
-                // Encode details and features to be passed into the modal function
                 const encodedDetails = encodeURIComponent(mail.details || '');
                 const encodedFeatures = encodeURIComponent(JSON.stringify(mail.featureList || []));
 
@@ -1241,7 +1136,6 @@
             lucide.createIcons();
         }
 
-        // [UPDATED] Load mail store and history with new report status logic
         async function loadMailStore() {
             const loginMailContainer = document.getElementById('login-mail-container');
             const otpMailContainer = document.getElementById('otp-mail-container');
@@ -1286,7 +1180,7 @@
                 });
 
                 const activePurchases = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => {
-                    if (p.isRefunded) return false; // Hide refunded mails
+                    if (p.isRefunded) return false; 
                     if (p.expirationHours && p.purchasedAt) {
                         const expiryTime = p.purchasedAt.toDate().getTime() + (p.expirationHours * 3600000);
                         return Date.now() < expiryTime;
@@ -1490,7 +1384,6 @@
             }
         }
 
-        // [UPDATED] Show Mail Details modal with features
         window.showMailDetails = function(mailType, encodedDetails, encodedFeatures) {
             const details = decodeURIComponent(encodedDetails);
             const features = JSON.parse(decodeURIComponent(encodedFeatures));
@@ -1827,14 +1720,17 @@
                 if (snapshot.empty) return supportContainer.innerHTML = '<p class="p-4 text-center text-gray-600">No support channels available.</p>';
                 supportContainer.innerHTML = snapshot.docs.map(doc => {
                     const channel = doc.data();
-                    return `<a href="${channel.link}" target="_blank" class="support-link-card"><img src="${channel.iconUrl}" alt="${channel.name} logo"><span>${channel.name}</span></a>`;
+                    return `<a href="${channel.link}" target="_blank" class="support-link-card">
+                        <img src="${channel.iconUrl}" alt="${channel.name} logo">
+                        <span>${channel.name}</span>
+                        <div class="ml-auto"><i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i></div>
+                    </a>`;
                 }).join('');
+                lucide.createIcons();
             } catch (e) { supportContainer.innerHTML = '<p class="p-4 text-center text-red-600">Support options could not be loaded.</p>'; }
         }
 
         function handleFeaturesClick() { navigateTo('features-page'); }
-
-        // --- NEW FUNCTIONS FOR REPLACE/REPORT SYSTEM ---
 
         window.showReportForm = (purchaseId, mailType, cost, saleId) => {
             document.getElementById('report-modal-mail-type').textContent = `${mailType} (ID: ${saleId})`;
@@ -1878,7 +1774,7 @@
                 });
                 showAlert("আপনার অভিযোগ সফলভাবে জমা হয়েছে। অ্যাডমিন শীঘ্রই এটি পর্যালোচনা করবেন।");
                 document.getElementById('report-issue-modal').classList.add('hidden');
-                loadMailStore(); // Refresh history to show pending status
+                loadMailStore(); 
             } catch (e) {
                 showAlert(`একটি সমস্যা হয়েছে: ${e.message}`);
             } finally {
@@ -1886,6 +1782,48 @@
             }
         }
         
+        async function loadReportHistory() {
+            const listEl = document.getElementById('report-history-list');
+            listEl.innerHTML = getLoadingHTML();
+            try {
+                const q = query(collection(db, "replace_requests"), where("userId", "==", userData.tgChatId), orderBy("requestedAt", "desc"));
+                const snapshot = await getDocs(q);
+                
+                if(snapshot.empty) {
+                    listEl.innerHTML = `<div class="text-center py-10"><i data-lucide="clipboard-x" class="w-12 h-12 text-gray-300 mx-auto mb-3"></i><p class="text-gray-500">You haven't reported any issues yet.</p></div>`;
+                    lucide.createIcons();
+                    return;
+                }
+
+                listEl.innerHTML = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    const date = data.requestedAt ? data.requestedAt.toDate().toLocaleDateString('en-GB') : 'N/A';
+                    let statusClass = 'status-pending';
+                    if(data.status === 'approved') statusClass = 'status-approved';
+                    if(data.status === 'rejected') statusClass = 'status-rejected';
+
+                    return `<div class="card-bg p-4 rounded-xl space-y-2">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-gray-800">${data.mailType}</h4>
+                                <p class="text-xs text-gray-500">Date: ${date}</p>
+                            </div>
+                            <span class="status-badge ${statusClass}">${data.status}</span>
+                        </div>
+                        <div class="bg-gray-50 p-2 rounded text-sm text-gray-700 mt-2">
+                            <span class="font-semibold text-gray-900 block mb-1">Reason:</span>
+                            ${data.reason}
+                        </div>
+                         ${data.proof ? `<a href="${data.proof}" target="_blank" class="text-blue-600 text-xs font-semibold hover:underline block mt-1">View Proof</a>` : ''}
+                    </div>`;
+                }).join('');
+                lucide.createIcons();
+            } catch (e) {
+                console.error(e);
+                listEl.innerHTML = '<p class="text-center text-red-500">Failed to load history.</p>';
+            }
+        }
+
         async function loadReplaceRequests() {
             const listEl = document.getElementById('replace-requests-list');
             listEl.innerHTML = getLoadingHTML();
@@ -1941,7 +1879,6 @@
             }
         }
         
-        // [UPDATED] Reject request with penalty logic
         window.handleRejectRequest = async (requestId, userId) => {
             if (!confirm("Are you sure you want to reject this request? This may trigger a penalty for the user.")) return;
             loader.style.display = 'flex';
@@ -1969,7 +1906,7 @@
 
                     if (dailyRejections.count >= 5) {
                         updates.isBlocked = true;
-                        updates.blockedUntil = Timestamp.fromMillis(Date.now() + 5 * 60 * 60 * 1000); // 5 hours block
+                        updates.blockedUntil = Timestamp.fromMillis(Date.now() + 5 * 60 * 60 * 1000); 
                     }
                     
                     transaction.update(userRef, updates);
