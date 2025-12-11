@@ -8,20 +8,19 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Google Fonts for Card Design -->
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5; /* Slightly darker for better contrast */
+            background-color: #f0f2f5;
             color: #333333;
             -webkit-user-select: none;
             -ms-user-select: none;
             user-select: none;
             -webkit-touch-callout: none;
-            padding-bottom: 80px; /* Space for bottom nav */
+            padding-bottom: 80px;
         }
         input, textarea, #mail-details-content, #mail-purchase-history .font-mono, .selectable-text {
             -webkit-user-select: text;
@@ -37,6 +36,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .card-bg:hover {
+            border-color: rgba(79, 70, 229, 0.3);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
             transform: translateY(-2px);
         }
@@ -85,7 +85,7 @@
              display: flex;
              justify-content: space-around;
              align-items: center;
-             padding: 10px 16px 20px 16px; /* Added padding bottom for iPhone home bar */
+             padding: 10px 16px 20px 16px;
              z-index: 50;
              box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
         }
@@ -123,7 +123,6 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Modern Banner */
         .banner-wrapper { position: relative; width: 100%; padding-top: 50%; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2); }
         .banner-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
         .slide { min-width: 100%; position: relative; }
@@ -132,7 +131,6 @@
         .dot { height: 6px; width: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; transition: all 0.3s; }
         .dot.active { background: #fff; width: 20px; border-radius: 10px; }
 
-        /* Credit Card Style Balance */
         .credit-card-bg {
             background: linear-gradient(110deg, #1e293b 0%, #0f172a 100%);
             border-radius: 20px;
@@ -154,21 +152,31 @@
         .loader-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid #4f46e5; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Slide Menu */
-        #slide-out-menu { box-shadow: 10px 0 30px rgba(0,0,0,0.1); }
-        .support-link-card:hover { border-color: #4f46e5; background: #eff6ff; color: #4f46e5; }
+        /* Mail Switcher (Original Style) */
+        .mail-view-switcher { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; background-color: #e5e7eb; padding: 0.5rem; border-radius: 0.75rem; }
+        .mail-view-switcher button { padding: 0.75rem; border-radius: 0.5rem; font-weight: 600; color: #4b5563; transition: all 0.3s ease; border: none; background-color: transparent; }
+        .mail-view-switcher button.active { background-color: #ffffff; color: #4f46e5; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+        /* Support List Styling */
+        .support-item {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #ffffff; padding: 16px; border-radius: 12px; margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02); border: 1px solid #f3f4f6;
+            transition: all 0.2s; text-decoration: none; color: #1f2937;
+        }
+        .support-item:hover { transform: translateX(5px); border-color: #4f46e5; }
+        .support-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
         
-        /* Offer Page Grid */
         .offer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .offer-item { position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08); transition: transform 0.2s; aspect-ratio: 9/16; background: #e5e7eb; }
         .offer-item:active { transform: scale(0.98); }
         .offer-item img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Action Grid Home */
         .action-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; padding: 16px; border-radius: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); gap: 8px; transition: transform 0.2s; border: 1px solid #f0f0f0; }
         .action-btn:active { transform: scale(0.95); background: #f9fafb; }
-        .action-btn i { color: #4f46e5; }
-        .action-btn span { font-size: 0.75rem; font-weight: 600; color: #374151; }
+        
+        .review-card-new { background-color: #ffffff; border: 1px solid #eee; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .star-rating i { color: #facc15; }
 
     </style>
 </head>
@@ -184,14 +192,14 @@
     <!-- Sidebar Menu -->
     <div id="menu-overlay"></div>
     <aside id="slide-out-menu">
-        <div class="menu-header bg-gray-50">
+        <div class="menu-header bg-gray-50 p-6 border-b border-gray-100">
             <h2 class="text-xl font-bold text-gray-800">Support Center</h2>
             <p class="text-xs text-gray-500 mt-1">We are here to help you</p>
         </div>
-        <nav id="support-channels-list" class="flex-grow overflow-y-auto support-grid">
+        <nav id="support-channels-list" class="flex-grow overflow-y-auto p-4 bg-gray-50/50">
             <!-- Populated via JS -->
         </nav>
-        <div class="p-4 text-center text-[10px] text-gray-400 border-t bg-gray-50">
+        <div class="p-4 text-center text-[10px] text-gray-400 border-t bg-white">
             BIGGER SERVER &copy; 2025
         </div>
     </aside>
@@ -224,19 +232,17 @@
         </header>
 
         <main class="flex-grow pb-4 px-4 pt-2 space-y-4">
-            <!-- =========== HOME PAGE (REDESIGNED) =========== -->
+            <!-- =========== HOME PAGE =========== -->
             <div id="home-page" class="space-y-6 sub-page">
-                <!-- Slider -->
                 <div class="banner-wrapper">
                     <div class="banner-inner" id="slides">
-                        <div class="slide active"><a href="https://t.me/EXPERTearn_team" target="_blank"><img src="https://i.postimg.cc/zBp8rCX9/Yellow-Orange-Modern-Marketing-Courses-You-Tube-Thumbnail-20250910-185659-0000.png" alt="Slide 1"></a></div>
-                        <div class="slide"><a href="https://t.me/EXPERTearn_team" target="_blank"><img src="https://i.postimg.cc/W1syFD8p/Grey-Blue-Illustration-Refer-a-Friend-Instagram-Post-1080-x-720-px-20250917-223749-0000.png" alt="Slide 2"></a></div>
-                        <div class="slide"><a href="https://t.me/EXPERTearn_team" target="_blank"><img src="https://i.postimg.cc/52HsFwvV/Black-and-Orange-Money-You-Tube-Thumbnail-20250917-224706-0000.png" alt="Slide 3"></a></div>
+                        <div class="slide active"><a href="#"><img src="https://i.postimg.cc/zBp8rCX9/Yellow-Orange-Modern-Marketing-Courses-You-Tube-Thumbnail-20250910-185659-0000.png" alt="Slide 1"></a></div>
+                        <div class="slide"><a href="#"><img src="https://i.postimg.cc/W1syFD8p/Grey-Blue-Illustration-Refer-a-Friend-Instagram-Post-1080-x-720-px-20250917-223749-0000.png" alt="Slide 2"></a></div>
+                        <div class="slide"><a href="#"><img src="https://i.postimg.cc/52HsFwvV/Black-and-Orange-Money-You-Tube-Thumbnail-20250917-224706-0000.png" alt="Slide 3"></a></div>
                     </div>
                     <div class="dots" id="dots"></div>
                 </div>
 
-                <!-- Modern Credit Card Balance -->
                 <div class="credit-card-bg p-6 flex flex-col justify-between h-48 w-full shadow-2xl">
                     <div class="flex justify-between items-start">
                         <div class="chip"></div>
@@ -254,7 +260,6 @@
                     </div>
                 </div>
 
-                <!-- Quick Actions Grid -->
                 <div class="grid grid-cols-4 gap-3">
                     <button class="action-btn" onclick="navigateTo('pay-page')">
                         <div class="p-2 bg-blue-50 rounded-full"><i data-lucide="wallet" class="w-5 h-5 text-blue-600"></i></div>
@@ -273,13 +278,9 @@
                         <span>Support</span>
                     </button>
                 </div>
-                
-                <div class="text-center pt-2">
-                    <p class="text-xs text-gray-400 font-medium">SECURE SERVER &bull; INSTANT DELIVERY</p>
-                </div>
             </div>
             
-            <!-- =========== OFFER PAGE (NEW) =========== -->
+            <!-- =========== OFFER PAGE =========== -->
             <div id="offer-page" class="sub-page">
                  <div class="relative flex items-center justify-center mb-4 pt-2">
                     <button onclick="navigateTo('home-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
@@ -287,13 +288,8 @@
                     </button>
                     <h2 class="text-xl font-bold text-center text-gray-800">Special Offers</h2>
                 </div>
-                <p class="text-xs text-center text-gray-500 mb-4">Click on the banner to claim the offer.</p>
-                
                 <div id="offer-list-container" class="offer-grid">
-                    <!-- Offers will be injected here via JS -->
-                    <div class="col-span-2 text-center py-10">
-                         <div class="premium-loader-spinner mx-auto"></div>
-                    </div>
+                    <div class="col-span-2 text-center py-10"><div class="loader-spinner mx-auto !w-8 !h-8"></div></div>
                 </div>
             </div>
 
@@ -355,50 +351,40 @@
                 <div class="mt-6"><h3 class="text-lg font-bold mb-3 px-1">Recent Transactions</h3><div id="payment-history-list" class="space-y-3"></div></div>
             </div>
 
-            <!-- =========== MAIL PAGE =========== -->
+            <!-- =========== MAIL PAGE (REVERTED TO ORIGINAL DESIGN) =========== -->
             <div id="mail-page" class="sub-page">
-                 <h2 class="text-xl font-bold text-center text-gray-800 mb-4 pt-2">Product Store</h2>
-                <div class="mail-view-switcher mb-6">
-                    <button id="login-mail-btn" class="active">LOGIN MAIL</button>
-                    <button id="otp-mail-btn">OTP MAIL</button>
-                </div>
-
-                <div id="mail-views-container">
-                    <div id="login-mail-container" class="mail-view space-y-4"></div>
-                    <div id="otp-mail-container" class="mail-view space-y-4"></div>
-                </div>
-                
-                <div class="mt-8">
-                    <div class="flex justify-between items-center mb-3 px-1">
-                        <h3 class="text-lg font-bold">Purchase History</h3>
-                        <div class="flex items-center gap-2">
-                           <button id="copy-history-btn" class="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                           <button id="download-history-btn" class="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50"><i data-lucide="download" class="w-4 h-4"></i></button>
-                        </div>
+                 <div class="space-y-6">
+                    <div class="mail-view-switcher">
+                        <button id="login-mail-btn" class="active">LOGIN MAIL</button>
+                        <button id="otp-mail-btn">OTP MAIL</button>
                     </div>
-                    <div id="mail-purchase-history" class="space-y-3"></div>
+
+                    <div id="mail-views-container">
+                        <div id="login-mail-container" class="space-y-4"></div>
+                        <div id="otp-mail-container" class="space-y-4" style="display:none;"></div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-lg font-semibold">Buy History</h3>
+                            <div class="flex items-center gap-2">
+                               <button id="copy-history-btn" class="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                               <button id="download-history-btn" class="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50"><i data-lucide="download" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                        <div id="mail-purchase-history" class="space-y-3"></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- =========== UPDATES PAGE =========== -->
+            <!-- =========== UPDATES PAGE (REVERTED TO ORIGINAL DESIGN) =========== -->
             <div id="updates-page" class="space-y-6 sub-page">
-                <h2 class="text-xl font-bold text-center text-gray-800 pt-2">News & Updates</h2>
+                <h2 class="text-xl font-bold text-center text-gray-800">Latest Update</h2>
                 <div id="updates-content" class="space-y-4"></div>
                 <div class="mt-8">
-                    <h3 class="text-lg font-bold text-center mb-4 text-gray-800">Customer Reviews</h3>
+                    <h3 class="text-lg font-semibold text-center mb-4 text-gray-800">Customer Reviews</h3>
                     <div id="reviews-list" class="space-y-4"></div>
                 </div>
-            </div>
-            
-            <!-- =========== TUTORIAL PAGE (HIDDEN FROM NAV) =========== -->
-            <div id="tutorial-page" class="space-y-6 sub-page">
-                 <div class="relative flex items-center justify-center mb-4 pt-2">
-                    <button onclick="navigateTo('profile-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
-                        <i data-lucide="arrow-left" class="w-6 h-6 text-gray-700"></i>
-                    </button>
-                    <h2 class="text-xl font-bold text-center text-gray-800">Tutorials</h2>
-                </div>
-                <div id="tutorial-list" class="space-y-5"></div>
             </div>
 
              <!-- =========== REPORT HISTORY PAGE =========== -->
@@ -543,24 +529,31 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- =========== TUTORIAL PAGE (HIDDEN) =========== -->
+            <div id="tutorial-page" class="space-y-6 sub-page">
+                 <div class="relative flex items-center justify-center mb-4 pt-2">
+                    <button onclick="navigateTo('profile-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6 text-gray-700"></i>
+                    </button>
+                    <h2 class="text-xl font-bold text-center text-gray-800">Tutorials</h2>
+                </div>
+                <div id="tutorial-list" class="space-y-5"></div>
+            </div>
         </main>
 
-        <!-- =========== BOTTOM NAV (UPDATED) =========== -->
+        <!-- =========== BOTTOM NAV =========== -->
         <nav class="bottom-nav">
             <a href="#" class="nav-link-premium" data-page="updates-page"><i data-lucide="bell-ring" class="icon"></i><span>Updates</span></a>
-            
-            <!-- REPLACED TUTORIAL WITH OFFER -->
             <a href="#" class="nav-link-premium" data-page="offer-page"><i data-lucide="gift" class="icon"></i><span>Offer</span></a>
-            
             <a href="#" class="nav-link-premium center-home-link active" data-page="home-page"><i data-lucide="layout-grid" class="icon"></i></a>
-            
             <a href="#" class="nav-link-premium" data-page="mail-page"><i data-lucide="shopping-bag" class="icon"></i><span>Shop</span></a>
             <a href="#" class="nav-link-premium" data-page="profile-page"><i data-lucide="user-circle-2" class="icon"></i><span>Profile</span></a>
             <a href="#" id="admin-nav-link" class="nav-link-premium hidden" data-page="admin-page"><i data-lucide="shield-alert" class="icon"></i><span>Admin</span></a>
         </nav>
     </div>
 
-    <!-- Modals (Same as before, styling tweaked) -->
+    <!-- Modals -->
     <div id="custom-alert" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[80] p-4 backdrop-blur-sm">
         <div class="bg-white rounded-2xl p-6 w-full max-w-xs text-center border shadow-2xl">
             <div class="mb-4 mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center"><i data-lucide="info" class="w-6 h-6 text-blue-600"></i></div>
@@ -675,7 +668,7 @@
                 
                 // For development/testing outside Telegram (Remove in production)
                 if (!currentUserTg) {
-                    // currentUserTg = { id: 12345678, first_name: "Test", last_name: "User", username: "tester" };
+                   // currentUserTg = { id: 12345678, first_name: "Test", last_name: "User", username: "tester" };
                     console.warn("Telegram data not found."); 
                 }
 
@@ -826,7 +819,6 @@
                 insufficientBalanceInterval = null;
             }
 
-            // Hide menu if open
             const menu = document.getElementById('slide-out-menu');
             const overlay = document.getElementById('menu-overlay');
             if(menu.classList.contains('open')) toggleMenu();
@@ -834,7 +826,6 @@
             document.querySelectorAll('.sub-page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             
-            // Scroll to top
             window.scrollTo(0, 0);
 
             document.querySelectorAll('.nav-link-premium[data-page]').forEach(link => {
@@ -850,7 +841,7 @@
                 'profile-page': loadProfilePage,
                 'features-page': loadFeaturesPage,
                 'tutorial-page': loadTutorials,
-                'offer-page': loadOffers, // New Function for Offers
+                'offer-page': loadOffers,
                 'link-team-page': loadLinkedFriends,
                 'send-page': () => { setupDynamicAmountHandlers('send'); },
                 'notification-page': showNotifications,
@@ -865,8 +856,6 @@
             const menu = document.getElementById('slide-out-menu');
             const overlay = document.getElementById('menu-overlay');
             menu.classList.toggle('open');
-            // Overlay logic manually handled via CSS based on menu class if preferred, 
-            // but here utilizing transform. Adding a separate class for overlay visibility:
             if(menu.classList.contains('open')){
                 overlay.style.opacity = '1';
                 overlay.style.visibility = 'visible';
@@ -878,7 +867,6 @@
             }
         }
         
-        // Setup overlay style dynamically since we removed the CSS class toggle for it in `toggleMenu`
         const overlay = document.getElementById('menu-overlay');
         overlay.style.position = 'fixed';
         overlay.style.inset = '0';
@@ -945,13 +933,11 @@
             document.getElementById('report-issue-form').addEventListener('submit', handleReportSubmit);
         }
         
-        // =========== NEW FUNCTION: LOAD OFFERS ===========
         async function loadOffers() {
             const container = document.getElementById('offer-list-container');
             container.innerHTML = getLoadingHTML();
             
             try {
-                // Fetching from 'offers' collection (Assuming field: imageUrl, linkUrl, order)
                 const q = query(collection(db, "offers"), orderBy("createdAt", "desc")); 
                 const snapshot = await getDocs(q);
                 
@@ -963,7 +949,6 @@
                 
                 container.innerHTML = snapshot.docs.map(doc => {
                     const offer = doc.data();
-                    // Fallback image if none provided
                     const img = offer.imageUrl || 'https://via.placeholder.com/300x533?text=Offer';
                     return `
                         <a href="#" onclick="window.Telegram.WebApp.openLink('${offer.linkUrl}')" class="offer-item block">
@@ -977,7 +962,6 @@
                 container.innerHTML = `<div class="col-span-2 text-center text-red-500 py-6">Failed to load offers.</div>`;
             }
         }
-        // =================================================
 
         function switchMailView(view) {
             const loginBtn = document.getElementById('login-mail-btn');
@@ -990,7 +974,7 @@
                 otpBtn.classList.remove('active');
                 loginContainer.style.display = 'block';
                 otpContainer.style.display = 'none';
-            } else { // otp
+            } else { 
                 loginBtn.classList.remove('active');
                 otpBtn.classList.add('active');
                 loginContainer.style.display = 'none';
@@ -998,7 +982,6 @@
             }
         }
 
-        // Notification Logic
         function listenForNotifications() {
             const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -1076,7 +1059,6 @@
             }
         }
 
-        // Deposit & Logic
         async function handleDepositRequest() {
             const method = document.getElementById('deposit-method').value;
             const amount = parseInt(document.getElementById('deposit-amount').value);
@@ -1124,7 +1106,6 @@
             } catch (error) { historyList.innerHTML = '<p class="text-red-400 text-xs text-center">Error loading history.</p>'; }
         }
 
-        // Shop Logic
         async function getStockCount(collectionName) {
             try {
                 const q = query(collection(db, collectionName), where("isSold", "==", false));
@@ -1133,9 +1114,10 @@
             } catch (error) { return 0; }
         }
         
+        // REVERTED MAIL RENDER FUNCTION
         async function renderMailList(mails, containerEl, effectiveBalance) {
             if (!mails || mails.length === 0) {
-                containerEl.innerHTML = `<p class="text-center text-gray-400 text-sm py-8">No items available.</p>`;
+                containerEl.innerHTML = `<p class="text-center text-gray-500 pt-10">এই ক্যাটাগরিতে কোনো মেইল উপলব্ধ নেই।</p>`;
                 return;
             }
 
@@ -1145,28 +1127,33 @@
 
             containerEl.innerHTML = mailsWithStock.map(mail => {
                 const isOutOfStock = mail.stock === 0;
-                const buyButtonDisabled = isOutOfStock;
-                const buyButtonClasses = buyButtonDisabled ? 'bg-gray-300 cursor-not-allowed text-gray-500' : 'btn-gradient text-white shadow-lg active:scale-95';
-                const validityHtml = (mail.expirationHours != null) ? `<span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded">${mail.expirationHours}h</span>` : '';
+                const insufficientBalance = effectiveBalance < mail.priceBdt;
+                const buyButtonDisabled = isOutOfStock || insufficientBalance;
+                const buyButtonClasses = buyButtonDisabled ? 'bg-gray-400 cursor-not-allowed' : 'btn-gradient';
+                const validityTagHtml = (mail.expirationHours != null) ? `<span class="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">${mail.expirationHours}h validity</span>` : '';
+                const apiButtonHtml = mail.apiLink ? `<button onclick="window.Telegram.WebApp.openLink('${mail.apiLink}')" class="text-blue-600 font-semibold">API</button>` : '<span class="text-gray-400 font-semibold">API</span>';
                 
                 const encodedDetails = encodeURIComponent(mail.details || '');
                 const encodedFeatures = encodeURIComponent(JSON.stringify(mail.featureList || []));
 
-                return `<div class="card-bg p-4 flex flex-col gap-3">
-                    <div class="flex justify-between items-start">
-                        <div class="flex gap-3">
-                            <img src="${mail.logoUrl}" class="w-10 h-10 rounded-lg object-cover bg-gray-100" alt="Icon">
-                            <div>
-                                <h3 class="font-bold text-gray-800 text-sm">${mail.type}</h3>
-                                <div class="flex items-center gap-2 mt-1">${validityHtml} <button onclick="showMailDetails('${mail.type}', '${encodedDetails}', '${encodedFeatures}')" class="text-gray-400 hover:text-blue-600"><i data-lucide="info" class="w-3 h-3"></i></button></div>
-                            </div>
+                return `<div class="card-bg p-4 rounded-xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <img src="${mail.logoUrl}" class="w-8 h-8 rounded-lg object-cover" alt="${mail.type} logo">
+                            <h3 class="font-bold text-lg text-gray-800">${mail.type}</h3>
                         </div>
-                        <div class="text-right">
-                             <p class="font-bold text-lg text-blue-600">৳${parseFloat(mail.priceBdt)}</p>
-                             <p class="text-[10px] ${mail.stock > 0 ? 'text-green-500' : 'text-red-500'} font-bold">${mail.stock > 0 ? mail.stock + ' IN STOCK' : 'OUT OF STOCK'}</p>
+                        <div class="flex items-center gap-2">
+                            ${validityTagHtml}
+                            <button onclick="showMailDetails('${mail.type}', '${encodedDetails}', '${encodedFeatures}')" class="text-blue-600 text-sm font-semibold">Details</button>
                         </div>
                     </div>
-                    <button class="${buyButtonClasses} w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-wide transition-transform" ${buyButtonDisabled ? 'disabled' : ''} onclick="buyMail('${mail.type}', ${mail.priceBdt}, '${mail.stockKey}')">${isOutOfStock ? 'Restocking Soon' : 'Purchase Now'}</button>
+                    
+                    <div class="grid grid-cols-3 text-center items-center pt-2 border-t border-gray-200">
+                        <div class="py-2">${apiButtonHtml}</div>
+                        <div class="py-2"><p class="text-gray-500 text-sm">Price</p><p class="font-bold text-lg text-blue-600">৳${parseFloat(mail.priceBdt).toFixed(2)}</p></div>
+                        <div class="py-2"><p class="text-gray-500 text-sm">Stock</p><p class="font-bold text-lg text-green-600">${mail.stock}</p></div>
+                    </div>
+                    <button class="${buyButtonClasses} w-full py-2 rounded-lg text-md" ${buyButtonDisabled ? 'disabled' : ''} onclick="buyMail('${mail.type}', ${mail.priceBdt}, '${mail.stockKey}')">Buy Now</button>
                 </div>`;
             }).join('');
             lucide.createIcons();
@@ -1200,7 +1187,6 @@
                     renderMailList(otpMails, otpMailContainer, effectiveBalance)
                 ]);
                 
-                // Keep current view
                 if(document.getElementById('otp-mail-btn').classList.contains('active')) {
                      switchMailView('otp');
                 } else {
@@ -1212,11 +1198,9 @@
                 const querySnapshot = await getDocs(q);
 
                 const purchaseIds = querySnapshot.docs.map(d => d.id);
-                // Optimization: Fetch report status only for visible purchases
                 const reportStatusMap = new Map();
                 if (purchaseIds.length > 0) {
-                     // Need to fetch logic if reported
-                     const rQ = query(collection(db, "replace_requests"), where("purchaseId", "in", purchaseIds.slice(0, 10))); // Limit for "in" query
+                     const rQ = query(collection(db, "replace_requests"), where("purchaseId", "in", purchaseIds.slice(0, 10))); 
                      const rSnap = await getDocs(rQ);
                      rSnap.forEach(d => reportStatusMap.set(d.data().purchaseId, d.data().status));
                 }
@@ -1224,33 +1208,22 @@
                 const activePurchases = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => !p.isRefunded);
 
                 if(activePurchases.length === 0) {
-                    historyListEl.innerHTML = '<p class="text-center text-gray-400 text-xs">No active purchases.</p>';
+                    historyListEl.innerHTML = '<p class="text-center text-gray-600">আপনার কোনো সক্রিয় কেনা মেইল নেই।</p>';
                 } else {
                     historyListEl.innerHTML = activePurchases.map(purchase => {
                         const date = purchase.purchasedAt.toDate().toLocaleString();
                         const fullData = [purchase.mail, purchase.password, purchase.refreshToken, purchase.clientId].filter(Boolean).join('|');
                         const reportStatus = reportStatusMap.get(purchase.id);
                         
-                        let actionBtn = `<button onclick="showReportForm('${purchase.id}', '${purchase.mailType}', ${purchase.cost}, '${purchase.saleId}')" class="text-orange-500 hover:text-orange-600 text-[10px] font-bold border border-orange-200 bg-orange-50 px-2 py-1 rounded">REPORT ISSUE</button>`;
-                        if (reportStatus === 'pending') actionBtn = `<span class="text-yellow-600 text-[10px] font-bold bg-yellow-50 px-2 py-1 rounded">PENDING REVIEW</span>`;
-                        if (reportStatus === 'approved') actionBtn = `<span class="text-green-600 text-[10px] font-bold bg-green-50 px-2 py-1 rounded">REFUNDED</span>`;
-                        if (reportStatus === 'rejected') actionBtn = `<span class="text-red-600 text-[10px] font-bold bg-red-50 px-2 py-1 rounded">REJECTED</span>`;
+                        let reportButton;
+                        switch (reportStatus) {
+                            case 'approved': reportButton = `<button class="bg-green-100 text-green-700 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1" disabled><i data-lucide="check-circle" class="w-3 h-3"></i> Refunded</button>`; break;
+                            case 'rejected': reportButton = `<button class="bg-gray-200 text-gray-600 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1" disabled><i data-lucide="x-circle" class="w-3 h-3"></i> Rejected</button>`; break;
+                            case 'pending': reportButton = `<button class="bg-yellow-100 text-yellow-700 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1" disabled><i data-lucide="hourglass" class="w-3 h-3"></i> Pending</button>`; break;
+                            default: reportButton = `<button id="report-btn-${purchase.id}" onclick="showReportForm('${purchase.id}', '${purchase.mailType}', ${purchase.cost}, '${purchase.saleId}')" class="bg-orange-100 text-orange-700 text-xs px-3 py-1.5 rounded-md font-semibold hover:bg-orange-200 flex items-center gap-1"><i data-lucide="shield-alert" class="w-3 h-3"></i> Report Issue</button>`;
+                        }
 
-                        return `<div class="card-bg p-3 space-y-2">
-                            <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                                <div><h4 class="font-bold text-xs text-gray-800">${purchase.mailType}</h4><p class="text-[10px] text-gray-400">${date}</p></div>
-                                ${actionBtn}
-                            </div>
-                            <div class="flex items-center justify-between bg-gray-50 p-2 rounded">
-                                <span class="font-mono text-xs text-gray-700 truncate w-48">${purchase.mail}</span>
-                                <button onclick="copyToClipboard('${purchase.mail}', this)" class="text-gray-400 hover:text-blue-600"><i data-lucide="copy" class="w-3 h-3"></i></button>
-                            </div>
-                             <div class="flex items-center justify-between bg-gray-50 p-2 rounded">
-                                <span class="font-mono text-xs text-gray-700 truncate w-48">${purchase.password || 'N/A'}</span>
-                                <button onclick="copyToClipboard('${purchase.password}', this)" class="text-gray-400 hover:text-blue-600"><i data-lucide="copy" class="w-3 h-3"></i></button>
-                            </div>
-                            <button onclick="copyToClipboard('${fullData}', this)" class="w-full text-center text-[10px] font-bold text-gray-500 hover:text-gray-800 mt-1">COPY FULL DATA</button>
-                        </div>`;
+                        return `<div class="card-bg p-4 rounded-xl space-y-3"><div class="flex justify-between items-start"><div><h4 class="font-bold text-lg text-gray-800">${purchase.mailType}</h4><p class="text-xs text-gray-500">${date}</p><p class="text-xs font-mono text-blue-600 mt-1">ID: ${purchase.saleId || 'N/A'}</p></div><div class="flex flex-col items-end gap-2">${reportButton}<button onclick="copyToClipboard('${fullData}', this)" class="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-md font-semibold hover:bg-gray-200 flex items-center gap-1"><i data-lucide="copy-plus" class="w-3 h-3"></i> FULL COPY</button></div></div><div class="space-y-2 pt-2 border-t"><div class="flex items-center justify-between bg-gray-50 p-2 rounded-md"><span class="text-sm font-medium text-gray-500 mr-2">EMAIL:</span><span class="font-mono text-sm text-gray-800 truncate">${purchase.mail}</span><button onclick="copyToClipboard('${purchase.mail}', this)" class="ml-2 p-1.5 rounded-md hover:bg-gray-200"><i data-lucide="copy" class="w-4 h-4 text-gray-600"></i></button></div><div class="flex items-center justify-between bg-gray-50 p-2 rounded-md"><span class="text-sm font-medium text-gray-500 mr-2">PASS:</span><span class="font-mono text-sm text-gray-800">${purchase.password || 'N/A'}</span><button onclick="copyToClipboard('${purchase.password || ''}', this)" class="ml-2 p-1.5 rounded-md hover:bg-gray-200"><i data-lucide="copy" class="w-4 h-4 text-gray-600"></i></button></div></div></div>`;
                     }).join('');
                 }
                 lucide.createIcons();
@@ -1308,7 +1281,6 @@
                     if (!buyerSnap.exists()) throw "User Error";
                     let currentBuyerData = buyerSnap.data();
 
-                    // Team logic check
                     let teamLeaderRef = null;
                     let currentLeaderData = null;
                     if (currentBuyerData.linkedBy) {
@@ -1320,7 +1292,6 @@
                     const effectiveBalance = currentBuyerData.balance + (currentLeaderData ? currentLeaderData.balance : 0);
                     if (effectiveBalance < cost) throw "Insufficient Balance";
 
-                    // Stock Check within transaction
                     const mailQuery = query(collection(db, stockKey), where("isSold", "==", false), limit(1));
                     const mailQuerySnapshot = await getDocs(mailQuery);
                     if (mailQuerySnapshot.empty) throw "Out of Stock";
@@ -1329,7 +1300,6 @@
                     const mailRef = mailDoc.ref;
                     const mailData = mailDoc.data();
 
-                    // Deduct Balance
                     let costRemaining = cost;
                     let paidBy = 'self';
                     let buyerDeduction = Math.min(costRemaining, currentBuyerData.balance);
@@ -1345,10 +1315,8 @@
                         paidBy = currentBuyerData.linkedBy;
                     }
 
-                    // Mark Sold
                     transaction.update(mailRef, { isSold: true, soldTo: userData.tgChatId, soldAt: serverTimestamp() });
                     
-                    // Log Purchase
                     const counterRef = doc(db, "counters", "mail_purchase");
                     const counterSnap = await transaction.get(counterRef);
                     const saleId = counterSnap.exists() ? counterSnap.data().currentId + 1 : 1;
@@ -1365,10 +1333,8 @@
                         expirationHours: mailConfig ? mailConfig.expirationHours : null
                     });
                     
-                    // Update Local UI Data
                     userData.balance = currentBuyerData.balance - buyerDeduction;
                     
-                    // Trigger Success Modal Data
                     document.getElementById('purchase-success-email').textContent = mailData.email;
                     document.getElementById('purchase-success-password').textContent = mailData.password || 'N/A';
                 });
@@ -1396,37 +1362,52 @@
             
             let contentHTML = `<p>${details}</p>`;
             if (features && features.length > 0) {
-                const list = features.map(f => `<li class="flex items-center gap-2 text-xs"><i data-lucide="check-circle-2" class="w-3 h-3 text-green-500"></i>${f}</li>`).join('');
-                contentHTML += `<ul class="mt-3 space-y-1">${list}</ul>`;
+                const list = features.map(f => `<div class="flex items-start gap-3 mt-2"><i data-lucide="shield-check" class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5"></i><span class="text-sm text-gray-800">${f}</span></div>`).join('');
+                contentHTML += `<div class="mt-4 pt-3 border-t border-gray-200"><h4 class="font-semibold text-gray-800 mb-2">Features:</h4>${list}</div>`;
             }
-            document.getElementById('mail-details-title').textContent = mailType;
+            document.getElementById('mail-details-title').textContent = `${mailType} Details`;
             document.getElementById('mail-details-content').innerHTML = contentHTML;
             document.getElementById('mail-details-modal').classList.remove('hidden');
             lucide.createIcons();
+        }
+
+        // REVERTED UPDATES PAGE LOGIC
+        window.toggleUpdateContent = (updateId, encodedContent) => {
+            const contentEl = document.getElementById(`update-content-${updateId}`);
+            const buttonEl = contentEl.nextElementSibling;
+            const fullContent = decodeURIComponent(encodedContent);
+            if (buttonEl.innerText === "Read More") {
+                contentEl.innerText = fullContent;
+                buttonEl.innerText = "Show Less";
+            } else {
+                contentEl.innerText = fullContent.substring(0, 120) + '...';
+                buttonEl.innerText = "Read More";
+            }
         }
 
         async function loadUpdates() {
             const updatesContainer = document.getElementById('updates-content');
             updatesContainer.innerHTML = getLoadingHTML();
             try {
-                const q = query(collection(db, "updates"), orderBy("createdAt", "desc"), limit(3));
+                const q = query(collection(db, "updates"), orderBy("createdAt", "desc"), limit(1));
                 const snapshot = await getDocs(q);
-                if (snapshot.empty) return updatesContainer.innerHTML = `<p class="text-center text-gray-400">No updates.</p>`;
+                if (snapshot.empty) return updatesContainer.innerHTML = `<div class="card-bg p-6 rounded-2xl text-center"><h3 class="font-bold text-xl text-gray-800">No new updates right now!</h3><p class="text-gray-600 mt-2">Check back later.</p></div>`;
 
-                updatesContainer.innerHTML = snapshot.docs.map(doc => {
-                    const u = doc.data();
-                    return `<div class="card-bg overflow-hidden">
-                        ${u.imageUrl ? `<img src="${u.imageUrl}" class="w-full h-32 object-cover">` : ''}
-                        <div class="p-4">
-                            <h3 class="font-bold text-gray-800">${u.title}</h3>
-                            <p class="text-sm text-gray-600 mt-1 whitespace-pre-wrap">${u.content}</p>
-                        </div>
-                    </div>`;
-                }).join('');
-            } catch(e) { console.error(e); }
+                const updateDoc = snapshot.docs[0];
+                const update = { id: updateDoc.id, ...updateDoc.data() };
+                const content = update.content || '';
+                const shortContent = content.length > 120 ? content.substring(0, 120) + '...' : content;
+                const encodedContent = encodeURIComponent(content);
+                const date = update.createdAt ? update.createdAt.toDate().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+
+                updatesContainer.innerHTML = `<div class="card-bg rounded-2xl overflow-hidden shadow-lg flex flex-col">${update.imageUrl ? `<img src="${update.imageUrl}" class="w-full aspect-[16/9] object-cover" alt="Update Banner">` : ''}<div class="p-5 space-y-3"><div><h3 class="text-xl font-bold text-gray-800">${update.title}</h3>${date ? `<p class="text-xs text-gray-500 mt-1">${date}</p>` : ''}</div><p id="update-content-${update.id}" class="text-gray-600 text-sm whitespace-pre-wrap leading-relaxed">${shortContent}</p>${content.length > 120 ? `<button onclick="toggleUpdateContent('${update.id}', '${encodedContent}')" class="font-semibold text-blue-600 text-sm hover:underline">Read More</button>` : ''}</div></div>`;
+                lucide.createIcons();
+            } catch(e) {
+                updatesContainer.innerHTML = `<p class="text-center text-red-600">Failed to load updates.</p>`;
+                console.error("Error loading updates:", e);
+            }
         }
         
-        // Admin functions (Simplified)
         function populateAdminMailTypes() {
             const selectEl = document.getElementById('mail-type-select');
             selectEl.innerHTML = '<option value="">Select Type</option>';
@@ -1444,7 +1425,7 @@
             let count = 0;
             
             lines.forEach(line => {
-                const parts = line.trim().split('/'); // separator
+                const parts = line.trim().split('/');
                 if(parts.length >= 2) {
                      const ref = doc(collection(db, stockKey));
                      batch.set(ref, { email: parts[0], password: parts[1], refresh_token: parts[2]||null, client_id: parts[3]||null, isSold: false, createdAt: serverTimestamp() });
@@ -1495,7 +1476,6 @@
         }
 
         async function loadFeaturesPage() {
-            // Load transfer stats
             const receivedQuery = query(collection(db, "transfers"), where("toId", "==", userData.tgChatId));
             const sentQuery = query(collection(db, "transfers"), where("fromId", "==", userData.tgChatId));
             const [rSnap, sSnap] = await Promise.all([getDocs(receivedQuery), getDocs(sentQuery)]);
@@ -1511,9 +1491,8 @@
         async function loadTransferHistory() {
             const list = document.getElementById('transfer-history-list');
             list.innerHTML = getLoadingHTML();
-            const q = query(collection(db, "transfers"), where("fromId", "==", userData.tgChatId), limit(5)); // simplified query for demo
+            const q = query(collection(db, "transfers"), where("fromId", "==", userData.tgChatId), limit(5));
             const s = await getDocs(q);
-             // Logic simplified for brevity, ideally check both from/to and sort
             if(s.empty) return list.innerHTML = '<p class="text-center text-gray-400 text-xs">No transfers.</p>';
             list.innerHTML = s.docs.map(d => {
                 const t = d.data();
@@ -1591,7 +1570,6 @@
              const linked = snap.data().linkedUsers || [];
              if(linked.length === 0) return list.innerHTML = '<p class="text-gray-400 text-xs text-center">No team members.</p>';
              
-             // Fetching one by one for demo simplicity
              let html = '';
              for(const uid of linked) {
                  const f = await getDoc(doc(db, "users", uid));
@@ -1628,28 +1606,43 @@
         async function loadReviews() {
              const list = document.getElementById('reviews-list');
              list.innerHTML = getLoadingHTML();
-             const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"), limit(3));
+             const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"), limit(5));
              const s = await getDocs(q);
-             if(s.empty) return list.innerHTML = '<p class="text-center text-gray-400">No reviews.</p>';
-             list.innerHTML = s.docs.map(d => {
-                 const r = d.data();
-                 return `<div class="bg-gray-50 p-3 rounded-xl"><div class="flex items-center gap-2 mb-1"><div class="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center text-[10px] font-bold">${r.name[0]}</div><span class="font-bold text-xs">${r.name}</span><div class="flex text-yellow-400 text-[10px]">${'★'.repeat(r.rating)}</div></div><p class="text-xs text-gray-600">"${r.reviewText}"</p></div>`;
+             if(s.empty) return list.innerHTML = '<p class="text-center text-gray-600">No reviews yet.</p>';
+
+             list.innerHTML = s.docs.map(doc => {
+                 const review = doc.data();
+                 const stars = Array(5).fill(0).map((_, i) => `<i data-lucide="star" class="w-4 h-4 ${i < review.rating ? 'fill-current' : ''}"></i>`).join('');
+                 const imageUrl = review.imageUrl || `https://ui-avatars.com/api/?name=${review.name.replace(/\s/g, "+")}&background=random`;
+                 return `<div class="review-card-new p-4 rounded-lg"><div class="flex items-start gap-4"><img src="${imageUrl}" class="w-12 h-12 rounded-full object-cover" alt="User"><div class="flex-1"><div class="flex justify-between items-center"><h5 class="font-bold">${review.name}</h5><div class="star-rating flex text-sm">${stars}</div></div><p class="text-gray-600 text-sm mt-1">"${review.reviewText}"</p></div></div></div>`;
              }).join('');
+             lucide.createIcons();
         }
 
+        // NEW ATTRACTIVE SUPPORT MENU
         async function loadSupportMenu() {
             const list = document.getElementById('support-channels-list');
-            // list.innerHTML = getLoadingHTML(); 
-            // Better to load quietly
-            try {
-                const q = query(collection(db, "support_channels"), orderBy("order"));
-                const s = await getDocs(q);
-                if(s.empty) return list.innerHTML = '<p class="text-center text-gray-400 text-xs p-4">No support channels.</p>';
-                list.innerHTML = s.docs.map(d => {
-                    const c = d.data();
-                    return `<a href="${c.link}" target="_blank" class="support-link-card flex items-center gap-3 p-3 bg-white border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors"><img src="${c.iconUrl}" class="w-8 h-8 rounded-full bg-gray-100"><span class="font-semibold text-sm text-gray-700">${c.name}</span></a>`;
-                }).join('');
-            } catch(e) { console.error(e); }
+            
+            // Hardcoded attractive channels with icons
+            const channels = [
+                { name: "Telegram Channel", iconColor: "bg-blue-100 text-blue-600", icon: "send", link: "https://t.me/your_channel_link" },
+                { name: "WhatsApp Support", iconColor: "bg-green-100 text-green-600", icon: "message-circle", link: "https://wa.me/your_number" },
+                { name: "Online Chat", iconColor: "bg-orange-100 text-orange-600", icon: "message-square", link: "https://t.me/your_support_user" },
+                { name: "Email Support", iconColor: "bg-gray-100 text-gray-600", icon: "mail", link: "mailto:support@biggerserver.com" }
+            ];
+
+            list.innerHTML = channels.map(c => `
+                <a href="${c.link}" target="_blank" class="support-item group">
+                    <div class="flex items-center">
+                        <div class="support-icon ${c.iconColor}">
+                            <i data-lucide="${c.icon}" class="w-6 h-6"></i>
+                        </div>
+                        <span class="font-bold text-sm text-gray-700">${c.name}</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 group-hover:text-indigo-500 transition-colors"></i>
+                </a>
+            `).join('');
+            lucide.createIcons();
         }
 
         function handleFeaturesClick() { navigateTo('features-page'); }
@@ -1694,7 +1687,6 @@
         }
         
         async function loadReplaceRequests() {
-             // Admin only: load pending requests
              const list = document.getElementById('replace-requests-list');
              list.innerHTML = getLoadingHTML();
              const q = query(collection(db, "replace_requests"), where("status", "==", "pending"));
@@ -1718,8 +1710,6 @@
                          const pRef = doc(db, "mail_purchases", pid);
                          t.update(uRef, { balance: increment(cost) });
                          t.update(pRef, { isRefunded: true });
-                     } else {
-                         // Add reject count logic here if needed
                      }
                  });
                  loadReplaceRequests();
