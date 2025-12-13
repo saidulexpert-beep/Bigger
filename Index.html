@@ -152,9 +152,9 @@
         .loader-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid #4f46e5; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Mail Switcher */
-        .mail-view-switcher { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; background-color: #e5e7eb; padding: 0.5rem; border-radius: 0.75rem; }
-        .mail-view-switcher button { padding: 0.75rem; border-radius: 0.5rem; font-weight: 600; color: #4b5563; transition: all 0.3s ease; border: none; background-color: transparent; }
+        /* Mail Switcher - Updated for 4 columns */
+        .mail-view-switcher { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.25rem; background-color: #e5e7eb; padding: 0.25rem; border-radius: 0.75rem; }
+        .mail-view-switcher button { padding: 0.5rem 0.2rem; border-radius: 0.5rem; font-weight: 700; font-size: 0.65rem; color: #4b5563; transition: all 0.3s ease; border: none; background-color: transparent; }
         .mail-view-switcher button.active { background-color: #ffffff; color: #4f46e5; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 
         /* Support List Styling */
@@ -193,6 +193,13 @@
 
     <!-- Loading Screen -->
     <div id="loader" class="fixed inset-0 flex flex-col items-center justify-center z-[100]">
+        <!-- Top Right Telegram Icon -->
+        <a href="https://t.me/Earn_Fire" target="_blank" class="absolute top-6 right-6 p-2 bg-white rounded-full shadow-lg hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#229ED9" class="w-6 h-6">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.293-.605.293l.216-3.051 5.56-5.022c.242-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/>
+            </svg>
+        </a>
+        
         <div class="loader-spinner mb-4"></div>
         <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 tracking-tighter">BIGGER SERVER</h1>
         <div id="loader-reviews" class="absolute bottom-10 text-sm text-gray-500 font-medium opacity-0 transition-opacity duration-500"></div>
@@ -206,7 +213,7 @@
             </div>
             <h2 class="text-2xl font-bold text-gray-800 mb-2">Access Locked!</h2>
             <p class="text-gray-500 text-sm mb-8">You must join our official channel to use this app.</p>
-            <button id="join-channel-btn" class="w-full py-3 rounded-xl btn-gradient font-bold mb-3 shadow-lg">Join Channel</button>
+            <button onclick="window.Telegram.WebApp.openLink('https://t.me/Earn_Fire')" class="w-full py-3 rounded-xl btn-gradient font-bold mb-3 shadow-lg">Join Channel</button>
             <button onclick="window.location.reload()" class="w-full py-3 rounded-xl bg-gray-100 text-gray-700 font-bold hover:bg-gray-200">I Joined, Reload</button>
         </div>
     </div>
@@ -302,7 +309,7 @@
                 </div>
             </div>
             
-            <!-- =========== OFFER PAGE (Updated with Tasks) =========== -->
+            <!-- =========== OFFER PAGE =========== -->
             <div id="offer-page" class="sub-page">
                  <div class="relative flex items-center justify-center mb-4 pt-2">
                     <button onclick="navigateTo('home-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
@@ -385,17 +392,21 @@
                 <div class="mt-6"><h3 class="text-lg font-bold mb-3 px-1">Recent Transactions</h3><div id="payment-history-list" class="space-y-3"></div></div>
             </div>
 
-            <!-- =========== MAIL PAGE =========== -->
+            <!-- =========== MAIL PAGE (Updated Categories) =========== -->
             <div id="mail-page" class="sub-page">
                  <div class="space-y-6">
                     <div class="mail-view-switcher">
-                        <button id="login-mail-btn" class="active">LOGIN MAIL</button>
-                        <button id="otp-mail-btn">OTP MAIL</button>
+                        <button id="login-mail-btn" class="active" onclick="switchMailView('login')">LOGIN</button>
+                        <button id="otp-mail-btn" onclick="switchMailView('otp')">OTP</button>
+                        <button id="account-mail-btn" onclick="switchMailView('account')">ACCOUNT</button>
+                        <button id="number-mail-btn" onclick="switchMailView('number')">NUMBER</button>
                     </div>
 
                     <div id="mail-views-container">
                         <div id="login-mail-container" class="space-y-4"></div>
                         <div id="otp-mail-container" class="space-y-4" style="display:none;"></div>
+                        <div id="account-mail-container" class="space-y-4" style="display:none;"></div>
+                        <div id="number-mail-container" class="space-y-4" style="display:none;"></div>
                     </div>
                     
                     <div class="mt-8">
@@ -512,7 +523,7 @@
                     <h3 class="font-bold text-gray-800">Add Stock</h3>
                     <div><select id="mail-type-select" class="w-full p-3 rounded-xl input-field text-sm font-semibold"></select></div>
                     <div><textarea id="mail-data-textarea" rows="8" placeholder="email/password/token" class="w-full p-3 rounded-xl input-field font-mono text-xs"></textarea></div>
-                    <button id="add-mails-btn" class="w-full p-3 rounded-xl btn-gradient">Add to Stock (To New Store DB)</button>
+                    <button id="add-mails-btn" class="w-full p-3 rounded-xl btn-gradient">Add to Stock</button>
                 </div>
 
                 <!-- Simple Task Adder for Admin -->
@@ -678,7 +689,11 @@
     <script type="module">
         const ADMIN_UID = "6954647230"; 
 
-        // 1. ORIGINAL CONFIG (For Users, Balance, Transactions, Deposits)
+        // ========== CONFIGURATION (SETUP HERE) ==========
+        const BOT_TOKEN = ""; // FILL THIS (e.g., 123456:ABC-DEF...)
+        const CHANNEL_ID = "@Earn_Fire"; // FILL THIS (e.g., @YourChannel)
+
+        // Single Config (Original)
         const firebaseConfig = {
             apiKey: "AIzaSyCoCy08FL_sHHdA0f2cJg0BaF-iYAhFuk0",
             authDomain: "mail-store-4692b.firebaseapp.com",
@@ -689,34 +704,16 @@
             appId: "1:264936867411:web:5933919e5bafae617968a6"
         };
 
-        // 2. NEW CONFIG (For Store Page, Mails Stock, Offers)
-        const storeConfig = {
-            apiKey: "AIzaSyAEV4zkuTcRYIFP2AMmKJTyDUTzSYLnbbM",
-            authDomain: "used-mail-shop.firebaseapp.com",
-            databaseURL: "https://used-mail-shop-default-rtdb.firebaseio.com",
-            projectId: "used-mail-shop",
-            storageBucket: "used-mail-shop.firebasestorage.app",
-            messagingSenderId: "251382358623",
-            appId: "1:251382358623:web:a567a9349d1fd87277b1ea"
-        };
-
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, limit, runTransaction, getCountFromServer, writeBatch, updateDoc, Timestamp, onSnapshot, arrayUnion, arrayRemove, increment } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-        // Initialize Main App (User DB)
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
-        // Initialize Store App (Store DB)
-        const appStore = initializeApp(storeConfig, "storeApp");
-        const dbStore = getFirestore(appStore);
 
         let currentUserTg = null;
         let userData = null;
         let appConfig = {};
-        let botConfig = null; // Holds Bot Token and Channel ID
         let insufficientBalanceInterval = null;
-        let countdownInterval = null;
 
         const loader = document.getElementById('loader');
 
@@ -731,8 +728,8 @@
                 currentUserTg = window.Telegram.WebApp.initDataUnsafe.user;
                 
                 if (!currentUserTg) {
+                   // For testing in browser without Telegram
                    // currentUserTg = { id: 12345678, first_name: "Test", last_name: "User", username: "tester" };
-                    console.warn("Telegram data not found."); 
                 }
 
                 if (!currentUserTg) {
@@ -779,14 +776,12 @@
         async function initUserSession() {
             if (!currentUserTg) return;
             const tgChatId = String(currentUserTg.id);
-            // User Data comes from MAIN DB
             const userRef = doc(db, "users", tgChatId);
             let userSnap = await getDoc(userRef);
 
             if (userSnap.exists()) {
                 userData = userSnap.data();
                 
-                // Unblock logic
                 if (userData.isBlocked && userData.blockedUntil && userData.blockedUntil.toMillis() < Date.now()) {
                     await updateDoc(userRef, { isBlocked: false, blockedUntil: null, lastSeen: serverTimestamp() });
                     userSnap = await getDoc(userRef);
@@ -817,7 +812,7 @@
                     linkedBy: null, 
                     teamSpending: {},
                     lastSeen: serverTimestamp(),
-                    lastAutoMessage: null // New field for auto message
+                    lastAutoMessage: null 
                 };
                 await setDoc(userRef, userData);
             }
@@ -828,18 +823,18 @@
             }
 
             await fetchAppConfig();
-            
-            // --- NEW: Check Channel Membership & Send Auto Message ---
-            await fetchBotConfig();
+
+            // --- Telegram Channel Check ---
+            // If API fails (likely due to CORS), we assume NOT JOINED (strict mode) or JOINED (lenient).
+            // Here strict mode is applied as per user request to lock entry if not joined.
             const isMember = await checkChannelMembership(tgChatId);
             if (!isMember) {
                 document.getElementById('channel-lock-modal').classList.remove('hidden');
                 loader.style.display = 'none';
-                return; // Stop loading if not member
+                return; // STOP EXECUTION
             }
             
             await sendDailyWelcome(tgChatId);
-            // ---------------------------------------------------------
 
             if (tgChatId === ADMIN_UID) {
                 document.getElementById('admin-nav-link').classList.remove('hidden');
@@ -853,52 +848,38 @@
         }
 
         async function fetchAppConfig() {
-            // Config comes from STORE DB
-            const configRef = doc(dbStore, "config", "main");
+            const configRef = doc(db, "config", "main");
             const configSnap = await getDoc(configRef);
             appConfig = configSnap.exists() ? configSnap.data() : { mails: [] };
         }
 
-        // --- NEW: Fetch Bot Config from Firebase ---
-        async function fetchBotConfig() {
-            try {
-                // Assuming 'bot_settings' doc in 'config' collection of STORE DB
-                // Fields: botToken, channelId, channelLink
-                const botRef = doc(dbStore, "config", "bot_settings");
-                const botSnap = await getDoc(botRef);
-                if (botSnap.exists()) {
-                    botConfig = botSnap.data();
-                    if(botConfig.channelLink) {
-                        document.getElementById('join-channel-btn').onclick = () => window.Telegram.WebApp.openLink(botConfig.channelLink);
-                    }
-                }
-            } catch (e) { console.error("Error fetching bot config", e); }
-        }
-
-        // --- NEW: Check Channel Membership ---
         async function checkChannelMembership(userId) {
-            if (!botConfig || !botConfig.botToken || !botConfig.channelId) return true; // Skip if not configured
+            if (!BOT_TOKEN) return true; // Bypass if no token configured
             
             try {
-                const url = `https://api.telegram.org/bot${botConfig.botToken}/getChatMember?chat_id=${botConfig.channelId}&user_id=${userId}`;
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/getChatMember?chat_id=${CHANNEL_ID}&user_id=${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 
                 if (data.ok) {
                     const status = data.result.status;
                     return ["creator", "administrator", "member", "restricted"].includes(status);
+                } else {
+                    console.error("API Error:", data.description);
+                    // If API errors (e.g. user never started bot, or CORS), return FALSE to lock them out
+                    return false; 
                 }
-                return false; // Request failed or user not found (not member)
             } catch (error) {
-                console.error("Membership check failed:", error);
-                // Fallback: Allow access if API fails to avoid blocking users due to network errors
-                return true; 
+                console.error("Membership check failed (likely CORS):", error);
+                // Important: Due to browser security (CORS), this fetch will likely fail on client-side.
+                // In a real production app, you MUST use a backend server to make this call.
+                // For this demo file, if it fails, we return false to force the modal.
+                return false; 
             }
         }
 
-        // --- NEW: Send Daily Welcome Message ---
         async function sendDailyWelcome(userId) {
-            if (!botConfig || !botConfig.botToken) return;
+            if (!BOT_TOKEN) return;
 
             const now = Date.now();
             const lastMsgTime = userData.lastAutoMessage ? userData.lastAutoMessage.toMillis() : 0;
@@ -907,14 +888,14 @@
             if (now - lastMsgTime > oneDay) {
                 try {
                     const message = "👋 Welcome back to BIGGER SERVER! Check out our new stocks today.";
-                    const url = `https://api.telegram.org/bot${botConfig.botToken}/sendMessage?chat_id=${userId}&text=${encodeURIComponent(message)}`;
+                    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${userId}&text=${encodeURIComponent(message)}`;
                     
-                    const response = await fetch(url);
-                    if (response.ok) {
-                        // Update timestamp in Main DB
-                        await updateDoc(doc(db, "users", userId), { lastAutoMessage: Timestamp.now() });
-                    }
-                } catch (e) { console.error("Auto message failed", e); }
+                    // Fire and forget (don't wait for response, ignore CORS errors for this one)
+                    fetch(url).catch(e => console.log("Auto msg err", e));
+                    
+                    // Update timestamp locally to prevent spam even if API fails
+                    await updateDoc(doc(db, "users", userId), { lastAutoMessage: Timestamp.now() });
+                } catch (e) { console.error("Auto message setup failed", e); }
             }
         }
         
@@ -1005,30 +986,6 @@
             }
         }
         
-        const overlay = document.getElementById('menu-overlay');
-        overlay.style.position = 'fixed';
-        overlay.style.inset = '0';
-        overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
-        overlay.style.backdropFilter = 'blur(4px)';
-        overlay.style.zIndex = '80';
-        overlay.style.opacity = '0';
-        overlay.style.visibility = 'hidden';
-        overlay.style.transition = 'all 0.3s ease';
-        
-        const slideMenu = document.getElementById('slide-out-menu');
-        slideMenu.style.position = 'fixed';
-        slideMenu.style.top = '0';
-        slideMenu.style.left = '0';
-        slideMenu.style.bottom = '0';
-        slideMenu.style.width = '75%';
-        slideMenu.style.maxWidth = '280px';
-        slideMenu.style.background = '#ffffff';
-        slideMenu.style.zIndex = '90';
-        slideMenu.style.transform = 'translateX(-100%)';
-        slideMenu.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-        slideMenu.style.display = 'flex';
-        slideMenu.style.flexDirection = 'column';
-
         function setupEventListeners() {
             document.querySelectorAll('.nav-link-premium[data-page]').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); navigateTo(link.dataset.page); }));
             document.getElementById('header-deposit-btn')?.addEventListener('click', () => navigateTo('pay-page'));
@@ -1042,20 +999,14 @@
             document.getElementById('hamburger-menu-btn').addEventListener('click', toggleMenu);
             document.getElementById('menu-overlay').addEventListener('click', toggleMenu);
             document.getElementById('go-to-support-btn').addEventListener('click', toggleMenu);
-            
             document.getElementById('more-features-btn').addEventListener('click', handleFeaturesClick);
-            
             document.getElementById('features-receive-btn').addEventListener('click', handleReceive);
             document.getElementById('features-send-btn').addEventListener('click', () => navigateTo('send-page'));
             document.getElementById('submit-send-btn').addEventListener('click', handleSendRequest);
             document.getElementById('search-friend-btn').addEventListener('click', handleSearchFriend);
-            
-            // Task Adder
             document.getElementById('add-task-btn').addEventListener('click', handleAddTask);
-
             document.getElementById('profile-tutorial-btn').addEventListener('click', () => navigateTo('tutorial-page'));
             document.getElementById('profile-report-history-btn').addEventListener('click', () => navigateTo('report-history-page'));
-
             document.getElementById('mail-details-ok-btn').addEventListener('click', () => { document.getElementById('mail-details-modal').classList.add('hidden'); });
             document.getElementById('close-insufficient-balance-modal').addEventListener('click', () => { document.getElementById('insufficient-balance-modal').classList.add('hidden'); });
             document.getElementById('insufficient-balance-deposit-btn').addEventListener('click', () => {
@@ -1063,22 +1014,15 @@
                 navigateTo('pay-page');
             });
             document.getElementById('alert-ok-btn').addEventListener('click', () => { document.getElementById('custom-alert').classList.add('hidden'); });
-
             const hidePurchaseSuccessModal = () => document.getElementById('purchase-success-modal').classList.add('hidden');
             document.getElementById('purchase-success-buy-again-btn').addEventListener('click', hidePurchaseSuccessModal);
             document.getElementById('close-purchase-success-modal').addEventListener('click', hidePurchaseSuccessModal);
-
-            document.getElementById('login-mail-btn').addEventListener('click', () => switchMailView('login'));
-            document.getElementById('otp-mail-btn').addEventListener('click', () => switchMailView('otp'));
-
             document.getElementById('report-issue-form').addEventListener('submit', handleReportSubmit);
         }
 
-        // --- NEW: Task Logic ---
         window.switchOfferTab = (tab) => {
             document.querySelectorAll('.offer-tab').forEach(t => t.classList.remove('active'));
             document.getElementById('tab-' + tab).classList.add('active');
-            
             document.querySelectorAll('.offer-content-section').forEach(s => s.style.display = 'none');
             document.getElementById('offer-content-' + tab).style.display = 'block';
         }
@@ -1086,10 +1030,8 @@
         async function loadOffers() {
             const container = document.getElementById('offer-list-container');
             container.innerHTML = getLoadingHTML();
-            
             try {
-                // Offers come from STORE DB
-                const q = query(collection(dbStore, "offers"), orderBy("createdAt", "desc")); 
+                const q = query(collection(db, "offers"), orderBy("createdAt", "desc")); 
                 const snapshot = await getDocs(q);
                 
                 if (snapshot.empty) {
@@ -1097,17 +1039,11 @@
                     lucide.createIcons();
                     return;
                 }
-                
                 container.innerHTML = snapshot.docs.map(doc => {
                     const offer = doc.data();
                     const img = offer.imageUrl || 'https://via.placeholder.com/300x533?text=Offer';
-                    return `
-                        <a href="#" onclick="window.Telegram.WebApp.openLink('${offer.linkUrl}')" class="offer-item block">
-                            <img src="${img}" alt="Offer" loading="lazy">
-                        </a>
-                    `;
+                    return `<a href="#" onclick="window.Telegram.WebApp.openLink('${offer.linkUrl}')" class="offer-item block"><img src="${img}" alt="Offer" loading="lazy"></a>`;
                 }).join('');
-                
             } catch (e) {
                 console.error("Error loading offers:", e);
                 container.innerHTML = `<div class="col-span-2 text-center text-red-500 py-6">Failed to load offers.</div>`;
@@ -1118,87 +1054,55 @@
             const container = document.getElementById('task-list-container');
             container.innerHTML = getLoadingHTML();
             try {
-                const q = query(collection(dbStore, "tasks"), orderBy("createdAt", "desc"));
+                const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
                 const snapshot = await getDocs(q);
 
                 if (snapshot.empty) {
                     container.innerHTML = `<p class="text-center text-gray-500 mt-4">No tasks available.</p>`;
                     return;
                 }
-
                 container.innerHTML = snapshot.docs.map(doc => {
                     const t = doc.data();
-                    return `<div class="task-item" onclick="window.Telegram.WebApp.openLink('${t.link}')">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600"><i data-lucide="check-square" class="w-4 h-4"></i></div>
-                            <div>
-                                <h4 class="font-bold text-sm text-gray-800">${t.title}</h4>
-                                <span class="task-reward">${t.reward}</span>
-                            </div>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
-                    </div>`;
+                    return `<div class="task-item" onclick="window.Telegram.WebApp.openLink('${t.link}')"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600"><i data-lucide="check-square" class="w-4 h-4"></i></div><div><h4 class="font-bold text-sm text-gray-800">${t.title}</h4><span class="task-reward">${t.reward}</span></div></div><i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i></div>`;
                 }).join('');
                 lucide.createIcons();
-            } catch (e) { console.error("Task load error", e); container.innerHTML = "Error loading tasks"; }
+            } catch (e) { container.innerHTML = "Error loading tasks"; }
         }
 
         async function handleAddTask() {
             const title = document.getElementById('task-title').value;
             const reward = document.getElementById('task-reward').value;
             const link = document.getElementById('task-link').value;
-
             if(!title || !reward || !link) return showAlert("Fill all fields");
-            
             loader.style.display = 'flex';
             try {
-                await addDoc(collection(dbStore, "tasks"), {
-                    title, reward, link, createdAt: serverTimestamp()
-                });
+                await addDoc(collection(db, "tasks"), { title, reward, link, createdAt: serverTimestamp() });
                 showAlert("Task Added!");
                 ['task-title','task-reward','task-link'].forEach(id => document.getElementById(id).value = '');
             } catch(e) { showAlert("Error adding task"); }
             finally { loader.style.display = 'none'; }
         }
 
-        function switchMailView(view) {
-            const loginBtn = document.getElementById('login-mail-btn');
-            const otpBtn = document.getElementById('otp-mail-btn');
-            const loginContainer = document.getElementById('login-mail-container');
-            const otpContainer = document.getElementById('otp-mail-container');
+        window.switchMailView = (view) => {
+            // Update buttons
+            document.querySelectorAll('.mail-view-switcher button').forEach(b => b.classList.remove('active'));
+            document.getElementById(`${view}-mail-btn`).classList.add('active');
 
-            if (view === 'login') {
-                loginBtn.classList.add('active');
-                otpBtn.classList.remove('active');
-                loginContainer.style.display = 'block';
-                otpContainer.style.display = 'none';
-            } else { 
-                loginBtn.classList.remove('active');
-                otpBtn.classList.add('active');
-                loginContainer.style.display = 'none';
-                otpContainer.style.display = 'block';
-            }
+            // Update containers
+            document.querySelectorAll('#mail-views-container > div').forEach(d => d.style.display = 'none');
+            document.getElementById(`${view}-mail-container`).style.display = 'block';
         }
 
         function listenForNotifications() {
-            // Notifications come from MAIN DB
             const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
                 const filteredDocs = snapshot.docs.filter(doc => {
                     const data = doc.data();
                     return !data.recipientId || data.recipientId === userData.tgChatId;
                 });
-
                 let unreadCount = 0;
                 const lastSeen = userData.lastSeenNotification ? userData.lastSeenNotification.toMillis() : 0;
-                
-                filteredDocs.forEach(doc => {
-                    const notification = doc.data();
-                    if (notification.createdAt.toMillis() > lastSeen) {
-                        unreadCount++;
-                    }
-                });
-
+                filteredDocs.forEach(doc => { if (doc.data().createdAt.toMillis() > lastSeen) unreadCount++; });
                 const badge = document.getElementById('notification-badge');
                 if (unreadCount > 0) {
                     badge.textContent = unreadCount;
@@ -1212,11 +1116,8 @@
         async function showNotifications() {
             const listEl = document.getElementById('notification-list-full');
             listEl.innerHTML = getLoadingHTML();
-            
-            // Notifications come from MAIN DB
             const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"), limit(20));
             const snapshot = await getDocs(q);
-
             const filteredDocs = snapshot.docs.filter(doc => {
                 const data = doc.data();
                 return !data.recipientId || data.recipientId === userData.tgChatId;
@@ -1232,7 +1133,6 @@
                 }).join('');
                 lucide.createIcons();
             }
-
             const userRef = doc(db, "users", userData.tgChatId);
             const newTimestamp = Timestamp.now();
             await updateDoc(userRef, { lastSeenNotification: newTimestamp });
@@ -1252,7 +1152,6 @@
                     document.getElementById('profile-pic').classList.add('hidden');
                     document.getElementById('profile-initials-avatar').classList.remove('hidden');
                 }
-                
                 document.getElementById('profile-name').textContent = `${currentUserTg.first_name} ${currentUserTg.last_name || ''}`.trim();
                 document.getElementById('profile-username').textContent = currentUserTg.username ? `@${currentUserTg.username}` : 'No Username';
                 document.getElementById('profile-id').textContent = `ID: ${currentUserTg.id}`;
@@ -1260,16 +1159,13 @@
         }
 
         async function handleDepositRequest() {
-            // Deposits go to MAIN DB
             const method = document.getElementById('deposit-method').value;
             const amount = parseInt(document.getElementById('deposit-amount').value);
             const senderNumber = document.getElementById('sender-number').value.trim();
             const transactionId = document.getElementById('deposit-txid').value.trim();
             if (!method || !amount || amount <= 0 || !senderNumber || !transactionId) return showAlert("Please fill all fields correctly.");
-
             loader.style.opacity = '1';
             loader.style.display = 'flex';
-
             try {
                 const depositQuery = query(collection(db, "deposits"), where("transactionId", "==", transactionId), where("status", "in", ["pending", "approved"]));
                 const querySnapshot = await getDocs(depositQuery);
@@ -1289,14 +1185,12 @@
         }
 
         async function loadPaymentHistory() {
-            // History comes from MAIN DB
             const historyList = document.getElementById('payment-history-list');
             historyList.innerHTML = getLoadingHTML();
             try {
                 const q = query(collection(db, "deposits"), where("userId", "==", userData.tgChatId), orderBy("requestedAt", "desc"), limit(10));
                 const snapshot = await getDocs(q);
                 if (snapshot.empty) return historyList.innerHTML = '<p class="text-gray-400 text-xs text-center">No transactions found.</p>';
-
                 historyList.innerHTML = snapshot.docs.map(doc => {
                     const item = doc.data();
                     const statusColors = { approved: 'text-green-600', rejected: 'text-red-600', pending: 'text-yellow-600' };
@@ -1310,8 +1204,7 @@
 
         async function getStockCount(collectionName) {
             try {
-                // Stocks check from STORE DB
-                const q = query(collection(dbStore, collectionName), where("isSold", "==", false));
+                const q = query(collection(db, collectionName), where("isSold", "==", false));
                 const snapshot = await getCountFromServer(q);
                 return snapshot.data().count;
             } catch (error) { return 0; }
@@ -1322,7 +1215,6 @@
                 containerEl.innerHTML = `<p class="text-center text-gray-500 pt-10">এই ক্যাটাগরিতে কোনো মেইল উপলব্ধ নেই।</p>`;
                 return;
             }
-
             const stockPromises = mails.map(mail => getStockCount(mail.stockKey));
             const stockCounts = await Promise.all(stockPromises);
             let mailsWithStock = mails.map((mail, index) => ({ ...mail, stock: stockCounts[index] })).sort((a, b) => b.stock - a.stock);
@@ -1334,29 +1226,10 @@
                 const buyButtonClasses = buyButtonDisabled ? 'bg-gray-400 cursor-not-allowed' : 'btn-gradient';
                 const validityTagHtml = (mail.expirationHours != null) ? `<span class="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">${mail.expirationHours}h validity</span>` : '';
                 const apiButtonHtml = mail.apiLink ? `<button onclick="window.Telegram.WebApp.openLink('${mail.apiLink}')" class="text-blue-600 font-semibold">API</button>` : '<span class="text-gray-400 font-semibold">API</span>';
-                
                 const encodedDetails = encodeURIComponent(mail.details || '');
                 const encodedFeatures = encodeURIComponent(JSON.stringify(mail.featureList || []));
 
-                return `<div class="card-bg p-4 rounded-xl space-y-3">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <img src="${mail.logoUrl}" class="w-8 h-8 rounded-lg object-cover" alt="${mail.type} logo">
-                            <h3 class="font-bold text-lg text-gray-800">${mail.type}</h3>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            ${validityTagHtml}
-                            <button onclick="showMailDetails('${mail.type}', '${encodedDetails}', '${encodedFeatures}')" class="text-blue-600 text-sm font-semibold">Details</button>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-3 text-center items-center pt-2 border-t border-gray-200">
-                        <div class="py-2">${apiButtonHtml}</div>
-                        <div class="py-2"><p class="text-gray-500 text-sm">Price</p><p class="font-bold text-lg text-blue-600">৳${parseFloat(mail.priceBdt).toFixed(2)}</p></div>
-                        <div class="py-2"><p class="text-gray-500 text-sm">Stock</p><p class="font-bold text-lg text-green-600">${mail.stock}</p></div>
-                    </div>
-                    <button class="${buyButtonClasses} w-full py-2 rounded-lg text-md" ${buyButtonDisabled ? 'disabled' : ''} onclick="buyMail('${mail.type}', ${mail.priceBdt}, '${mail.stockKey}')">Buy Now</button>
-                </div>`;
+                return `<div class="card-bg p-4 rounded-xl space-y-3"><div class="flex justify-between items-center"><div class="flex items-center gap-3"><img src="${mail.logoUrl}" class="w-8 h-8 rounded-lg object-cover" alt="${mail.type} logo"><h3 class="font-bold text-lg text-gray-800">${mail.type}</h3></div><div class="flex items-center gap-2">${validityTagHtml}<button onclick="showMailDetails('${mail.type}', '${encodedDetails}', '${encodedFeatures}')" class="text-blue-600 text-sm font-semibold">Details</button></div></div><div class="grid grid-cols-3 text-center items-center pt-2 border-t border-gray-200"><div class="py-2">${apiButtonHtml}</div><div class="py-2"><p class="text-gray-500 text-sm">Price</p><p class="font-bold text-lg text-blue-600">৳${parseFloat(mail.priceBdt).toFixed(2)}</p></div><div class="py-2"><p class="text-gray-500 text-sm">Stock</p><p class="font-bold text-lg text-green-600">${mail.stock}</p></div></div><button class="${buyButtonClasses} w-full py-2 rounded-lg text-md" ${buyButtonDisabled ? 'disabled' : ''} onclick="buyMail('${mail.type}', ${mail.priceBdt}, '${mail.stockKey}')">Buy Now</button></div>`;
             }).join('');
             lucide.createIcons();
         }
@@ -1364,14 +1237,13 @@
         async function loadMailStore() {
             const loginMailContainer = document.getElementById('login-mail-container');
             const otpMailContainer = document.getElementById('otp-mail-container');
+            const accountMailContainer = document.getElementById('account-mail-container');
+            const numberMailContainer = document.getElementById('number-mail-container');
             const historyListEl = document.getElementById('mail-purchase-history');
             
-            loginMailContainer.innerHTML = getLoadingHTML();
-            otpMailContainer.innerHTML = getLoadingHTML();
-            historyListEl.innerHTML = getLoadingHTML();
+            [loginMailContainer, otpMailContainer, accountMailContainer, numberMailContainer, historyListEl].forEach(el => el.innerHTML = getLoadingHTML());
             
             try {
-                // User Balance from MAIN DB
                 const userSnap = await getDoc(doc(db, "users", userData.tgChatId));
                 userData = userSnap.data();
 
@@ -1381,23 +1253,29 @@
                     if (teamLeaderSnap.exists()) effectiveBalance += teamLeaderSnap.data().balance;
                 }
 
-                // Mail Config from STORE DB (Fetched in init)
                 const allMails = appConfig.mails || [];
                 const loginMails = allMails.filter(m => m.category === 'login' || !m.category);
                 const otpMails = allMails.filter(m => m.category === 'otp');
+                const accountMails = allMails.filter(m => m.category === 'account');
+                const numberMails = allMails.filter(m => m.category === 'number');
 
                 await Promise.all([
                     renderMailList(loginMails, loginMailContainer, effectiveBalance),
-                    renderMailList(otpMails, otpMailContainer, effectiveBalance)
+                    renderMailList(otpMails, otpMailContainer, effectiveBalance),
+                    renderMailList(accountMails, accountMailContainer, effectiveBalance),
+                    renderMailList(numberMails, numberMailContainer, effectiveBalance)
                 ]);
                 
-                if(document.getElementById('otp-mail-btn').classList.contains('active')) {
-                     switchMailView('otp');
+                // Re-apply active view logic
+                const activeBtn = document.querySelector('.mail-view-switcher button.active');
+                if(activeBtn) {
+                     // Get the ID (e.g., login-mail-btn) -> split -> get 'login' -> switchMailView
+                     const view = activeBtn.id.split('-')[0]; 
+                     switchMailView(view);
                 } else {
                      switchMailView('login');
                 }
 
-                // Purchase History from MAIN DB
                 const twentyFourHoursAgo = Timestamp.fromDate(new Date(Date.now() - 24 * 60 * 60 * 1000));
                 const q = query(collection(db, "mail_purchases"), where("userId", "==", userData.tgChatId), where("purchasedAt", ">=", twentyFourHoursAgo), orderBy("purchasedAt", "desc"));
                 const querySnapshot = await getDocs(q);
@@ -1419,7 +1297,6 @@
                         const date = purchase.purchasedAt.toDate().toLocaleString();
                         const fullData = [purchase.mail, purchase.password, purchase.refreshToken, purchase.clientId].filter(Boolean).join('|');
                         const reportStatus = reportStatusMap.get(purchase.id);
-                        
                         let reportButton;
                         switch (reportStatus) {
                             case 'approved': reportButton = `<button class="bg-green-100 text-green-700 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1" disabled><i data-lucide="check-circle" class="w-3 h-3"></i> Refunded</button>`; break;
@@ -1427,22 +1304,16 @@
                             case 'pending': reportButton = `<button class="bg-yellow-100 text-yellow-700 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1" disabled><i data-lucide="hourglass" class="w-3 h-3"></i> Pending</button>`; break;
                             default: reportButton = `<button id="report-btn-${purchase.id}" onclick="showReportForm('${purchase.id}', '${purchase.mailType}', ${purchase.cost}, '${purchase.saleId}')" class="bg-orange-100 text-orange-700 text-xs px-3 py-1.5 rounded-md font-semibold hover:bg-orange-200 flex items-center gap-1"><i data-lucide="shield-alert" class="w-3 h-3"></i> Report Issue</button>`;
                         }
-
                         return `<div class="card-bg p-4 rounded-xl space-y-3"><div class="flex justify-between items-start"><div><h4 class="font-bold text-lg text-gray-800">${purchase.mailType}</h4><p class="text-xs text-gray-500">${date}</p><p class="text-xs font-mono text-blue-600 mt-1">ID: ${purchase.saleId || 'N/A'}</p></div><div class="flex flex-col items-end gap-2">${reportButton}<button onclick="copyToClipboard('${fullData}', this)" class="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-md font-semibold hover:bg-gray-200 flex items-center gap-1"><i data-lucide="copy-plus" class="w-3 h-3"></i> FULL COPY</button></div></div><div class="space-y-2 pt-2 border-t"><div class="flex items-center justify-between bg-gray-50 p-2 rounded-md"><span class="text-sm font-medium text-gray-500 mr-2">EMAIL:</span><span class="font-mono text-sm text-gray-800 truncate">${purchase.mail}</span><button onclick="copyToClipboard('${purchase.mail}', this)" class="ml-2 p-1.5 rounded-md hover:bg-gray-200"><i data-lucide="copy" class="w-4 h-4 text-gray-600"></i></button></div><div class="flex items-center justify-between bg-gray-50 p-2 rounded-md"><span class="text-sm font-medium text-gray-500 mr-2">PASS:</span><span class="font-mono text-sm text-gray-800">${purchase.password || 'N/A'}</span><button onclick="copyToClipboard('${purchase.password || ''}', this)" class="ml-2 p-1.5 rounded-md hover:bg-gray-200"><i data-lucide="copy" class="w-4 h-4 text-gray-600"></i></button></div></div></div>`;
                     }).join('');
                 }
                 lucide.createIcons();
-
-            } catch(e) {
-                 console.error(e);
-                 historyListEl.innerHTML = '<p class="text-center text-red-400 text-xs">Error loading history.</p>';
-            }
+            } catch(e) { historyListEl.innerHTML = '<p class="text-center text-red-400 text-xs">Error loading history.</p>'; }
         }
         
         async function handleDownloadHistory() {
             loader.style.display = 'flex';
             try {
-                // Main DB for history
                 const q = query(collection(db, "mail_purchases"), where("userId", "==", userData.tgChatId), orderBy("purchasedAt", "desc"));
                 const querySnapshot = await getDocs(q);
                 if (querySnapshot.empty) {
@@ -1461,7 +1332,6 @@
         async function handleCopyHistory() {
              loader.style.display = 'flex';
             try {
-                // Main DB for history
                 const fourHoursAgo = Timestamp.fromDate(new Date(Date.now() - 4 * 60 * 60 * 1000));
                 const q = query(collection(db, "mail_purchases"), where("userId", "==", userData.tgChatId), where("purchasedAt", ">=", fourHoursAgo), orderBy("purchasedAt", "desc"));
                 const querySnapshot = await getDocs(q);
@@ -1482,105 +1352,72 @@
             loader.style.display = 'flex';
             
             try {
-                // Step 1: Pre-check balance on MAIN DB (Read only)
-                const buyerRef = doc(db, "users", userData.tgChatId);
-                const buyerSnap = await getDoc(buyerRef);
-                const currentBuyerData = buyerSnap.data();
-                
-                let teamLeaderRef = null;
-                let currentLeaderData = null;
-                if (currentBuyerData.linkedBy) {
-                    teamLeaderRef = doc(db, "users", currentBuyerData.linkedBy);
-                    const leaderSnap = await getDoc(teamLeaderRef);
-                    if (leaderSnap.exists()) currentLeaderData = leaderSnap.data();
-                }
+                await runTransaction(db, async (transaction) => {
+                    const buyerRef = doc(db, "users", userData.tgChatId);
+                    const buyerSnap = await transaction.get(buyerRef);
+                    if (!buyerSnap.exists()) throw "User Error";
+                    let currentBuyerData = buyerSnap.data();
 
-                const effectiveBalance = currentBuyerData.balance + (currentLeaderData ? currentLeaderData.balance : 0);
-                if (effectiveBalance < cost) {
-                    throw "Insufficient Balance";
-                }
+                    let teamLeaderRef = null;
+                    let currentLeaderData = null;
+                    if (currentBuyerData.linkedBy) {
+                        teamLeaderRef = doc(db, "users", currentBuyerData.linkedBy);
+                        const leaderSnap = await transaction.get(teamLeaderRef);
+                        if (leaderSnap.exists()) currentLeaderData = leaderSnap.data();
+                    }
+                    
+                    const effectiveBalance = currentBuyerData.balance + (currentLeaderData ? currentLeaderData.balance : 0);
+                    if (effectiveBalance < cost) throw "Insufficient Balance";
 
-                // Step 2: Grab Item from STORE DB
-                let mailData = null;
-                await runTransaction(dbStore, async (transaction) => {
-                    const mailQuery = query(collection(dbStore, stockKey), where("isSold", "==", false), limit(1));
+                    const mailQuery = query(collection(db, stockKey), where("isSold", "==", false), limit(1));
                     const mailQuerySnapshot = await getDocs(mailQuery);
                     if (mailQuerySnapshot.empty) throw "Out of Stock";
                     
                     const mailDoc = mailQuerySnapshot.docs[0];
-                    transaction.update(mailDoc.ref, { isSold: true, soldTo: userData.tgChatId, soldAt: serverTimestamp() });
-                    mailData = mailDoc.data();
+                    const mailRef = mailDoc.ref;
+                    const mailData = mailDoc.data();
+
+                    let costRemaining = cost;
+                    let paidBy = 'self';
+                    let buyerDeduction = Math.min(costRemaining, currentBuyerData.balance);
+                    
+                    if (buyerDeduction > 0) {
+                        transaction.update(buyerRef, { balance: currentBuyerData.balance - buyerDeduction });
+                        costRemaining -= buyerDeduction;
+                    }
+                    if (costRemaining > 0 && teamLeaderRef) {
+                        transaction.update(teamLeaderRef, { balance: currentLeaderData.balance - costRemaining });
+                        const newSpending = (currentLeaderData.teamSpending?.[userData.tgChatId] || 0) + costRemaining;
+                        transaction.update(teamLeaderRef, { [`teamSpending.${userData.tgChatId}`]: newSpending });
+                        paidBy = currentBuyerData.linkedBy;
+                    }
+
+                    transaction.update(mailRef, { isSold: true, soldTo: userData.tgChatId, soldAt: serverTimestamp() });
+                    
+                    const counterRef = doc(db, "counters", "mail_purchase");
+                    const counterSnap = await transaction.get(counterRef);
+                    const saleId = counterSnap.exists() ? counterSnap.data().currentId + 1 : 1;
+                    transaction.set(counterRef, { currentId: saleId }, { merge: true });
+
+                    const newPurchaseRef = doc(collection(db, "mail_purchases"));
+                    const mailConfig = appConfig.mails.find(m => m.stockKey === stockKey);
+                    
+                    transaction.set(newPurchaseRef, {
+                        saleId: saleId, userId: userData.tgChatId, paidBy: paidBy, mailType: mailType,
+                        mail: mailData.email, password: mailData.password || null,
+                        refreshToken: mailData.refresh_token || null, clientId: mailData.client_id || null,
+                        cost: cost, purchasedAt: serverTimestamp(),
+                        expirationHours: mailConfig ? mailConfig.expirationHours : null
+                    });
+                    
+                    userData.balance = currentBuyerData.balance - buyerDeduction;
+                    document.getElementById('purchase-success-email').textContent = mailData.email;
+                    document.getElementById('purchase-success-password').textContent = mailData.password || 'N/A';
                 });
 
-                if (!mailData) throw "Failed to retrieve item";
-
-                // Step 3: Deduct Money & Save Record on MAIN DB
-                try {
-                     await runTransaction(db, async (transaction) => {
-                        const bRef = doc(db, "users", userData.tgChatId);
-                        const bSnap = await transaction.get(bRef);
-                        const bData = bSnap.data();
-
-                        // Re-fetch leader in transaction for safety
-                        let lRef = null;
-                        let lData = null;
-                        if (bData.linkedBy) {
-                            lRef = doc(db, "users", bData.linkedBy);
-                            const lSnap = await transaction.get(lRef);
-                            lData = lSnap.data();
-                        }
-
-                        let costRemaining = cost;
-                        let paidBy = 'self';
-                        let buyerDeduction = Math.min(costRemaining, bData.balance);
-
-                        // Double check balance inside transaction
-                         const totalAvail = bData.balance + (lData ? lData.balance : 0);
-                         if (totalAvail < cost) throw "Insufficient Balance";
-
-                        if (buyerDeduction > 0) {
-                            transaction.update(bRef, { balance: bData.balance - buyerDeduction });
-                            costRemaining -= buyerDeduction;
-                        }
-                        if (costRemaining > 0 && lRef) {
-                            transaction.update(lRef, { balance: lData.balance - costRemaining });
-                            const newSpending = (lData.teamSpending?.[userData.tgChatId] || 0) + costRemaining;
-                            transaction.update(lRef, { [`teamSpending.${userData.tgChatId}`]: newSpending });
-                            paidBy = bData.linkedBy;
-                        }
-
-                        // Save Purchase Record
-                        const counterRef = doc(db, "counters", "mail_purchase");
-                        const counterSnap = await transaction.get(counterRef);
-                        const saleId = counterSnap.exists() ? counterSnap.data().currentId + 1 : 1;
-                        transaction.set(counterRef, { currentId: saleId }, { merge: true });
-
-                        const newPurchaseRef = doc(collection(db, "mail_purchases"));
-                        const mailConfig = appConfig.mails.find(m => m.stockKey === stockKey);
-
-                        transaction.set(newPurchaseRef, {
-                            saleId: saleId, userId: userData.tgChatId, paidBy: paidBy, mailType: mailType,
-                            mail: mailData.email, password: mailData.password || null,
-                            refreshToken: mailData.refresh_token || null, clientId: mailData.client_id || null,
-                            cost: cost, purchasedAt: serverTimestamp(),
-                            expirationHours: mailConfig ? mailConfig.expirationHours : null
-                        });
-                        
-                        // Update local balance for UI
-                        userData.balance = bData.balance - buyerDeduction;
-                    });
-                } catch (paymentError) {
-                    console.error("Payment failed, but item reserved. Manual check needed.", paymentError);
-                    throw paymentError; 
-                }
-
-                // Success
-                document.getElementById('purchase-success-email').textContent = mailData.email;
-                document.getElementById('purchase-success-password').textContent = mailData.password || 'N/A';
                 document.getElementById('purchase-success-modal').classList.remove('hidden');
                 updateUI();
                 loadMailStore(); 
-
             } catch (e) { 
                 if (e === "Insufficient Balance") {
                     document.getElementById('insufficient-balance-modal').classList.remove('hidden');
@@ -1627,7 +1464,6 @@
             const updatesContainer = document.getElementById('updates-content');
             updatesContainer.innerHTML = getLoadingHTML();
             try {
-                // Updates from MAIN DB
                 const q = query(collection(db, "updates"), orderBy("createdAt", "desc"), limit(1));
                 const snapshot = await getDocs(q);
                 if (snapshot.empty) return updatesContainer.innerHTML = `<div class="card-bg p-6 rounded-2xl text-center"><h3 class="font-bold text-xl text-gray-800">No new updates right now!</h3><p class="text-gray-600 mt-2">Check back later.</p></div>`;
@@ -1657,26 +1493,21 @@
             const stockKey = document.getElementById('mail-type-select').value;
             const data = document.getElementById('mail-data-textarea').value;
             if(!stockKey || !data) return showAlert("Invalid Input");
-            
             loader.style.display = 'flex';
-            
-            // Add Mails to STORE DB
-            const batch = writeBatch(dbStore);
+            const batch = writeBatch(db);
             const lines = data.trim().split('\n');
             let count = 0;
-            
             lines.forEach(line => {
                 const parts = line.trim().split('/');
                 if(parts.length >= 2) {
-                     const ref = doc(collection(dbStore, stockKey));
+                     const ref = doc(collection(db, stockKey));
                      batch.set(ref, { email: parts[0], password: parts[1], refresh_token: parts[2]||null, client_id: parts[3]||null, isSold: false, createdAt: serverTimestamp() });
                      count++;
                 }
             });
-            
             await batch.commit();
             loader.style.display = 'none';
-            showAlert(`${count} mails added to STORE DB.`);
+            showAlert(`${count} mails added to STOCK.`);
             document.getElementById('mail-data-textarea').value = '';
         }
 
@@ -1717,7 +1548,6 @@
         }
 
         async function loadFeaturesPage() {
-            // Transfers in MAIN DB
             const receivedQuery = query(collection(db, "transfers"), where("toId", "==", userData.tgChatId));
             const sentQuery = query(collection(db, "transfers"), where("fromId", "==", userData.tgChatId));
             const [rSnap, sSnap] = await Promise.all([getDocs(receivedQuery), getDocs(sentQuery)]);
@@ -1731,7 +1561,6 @@
         }
 
         async function loadTransferHistory() {
-            // MAIN DB
             const list = document.getElementById('transfer-history-list');
             list.innerHTML = getLoadingHTML();
             const q = query(collection(db, "transfers"), where("fromId", "==", userData.tgChatId), limit(5));
@@ -1757,7 +1586,6 @@
         }
         
         async function handleSendRequest() {
-            // MAIN DB
             const toId = document.getElementById('send-recipient-id').value.trim();
             const amount = parseFloat(document.getElementById('send-amount').value);
             if(!toId || amount < 20) return showAlert("Invalid details. Min amount 20.");
@@ -1789,7 +1617,6 @@
             finally { loader.style.display = 'none'; }
         }
 
-        // Team Linking
         async function handleSearchFriend() {
             const fid = document.getElementById('link-friend-id').value.trim();
             if(!fid) return;
@@ -1799,7 +1626,6 @@
         }
         
         window.linkFriend = async (fid) => {
-            // MAIN DB
             await updateDoc(doc(db, "users", userData.tgChatId), { linkedUsers: arrayUnion(fid) });
             await updateDoc(doc(db, "users", fid), { linkedBy: userData.tgChatId });
             showAlert("Linked!");
@@ -1809,7 +1635,6 @@
         }
 
         async function loadLinkedFriends() {
-             // MAIN DB
              const list = document.getElementById('linked-friends-list');
              list.innerHTML = getLoadingHTML();
              const snap = await getDoc(doc(db, "users", userData.tgChatId));
@@ -1829,7 +1654,6 @@
         }
         
         window.unlink = async (uid) => {
-             // MAIN DB
              if(!confirm("Remove user?")) return;
              await updateDoc(doc(db, "users", userData.tgChatId), { linkedUsers: arrayRemove(uid) });
              await updateDoc(doc(db, "users", uid), { linkedBy: null });
@@ -1837,7 +1661,6 @@
         }
 
         async function loadTutorials() {
-            // Tutorials from MAIN DB
             const list = document.getElementById('tutorial-list');
             list.innerHTML = getLoadingHTML();
             try {
@@ -1852,7 +1675,6 @@
         }
 
         async function loadReviews() {
-             // Reviews from MAIN DB
              const list = document.getElementById('reviews-list');
              list.innerHTML = getLoadingHTML();
              const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"), limit(5));
@@ -1868,29 +1690,15 @@
              lucide.createIcons();
         }
 
-        // NEW ATTRACTIVE SUPPORT MENU
         async function loadSupportMenu() {
             const list = document.getElementById('support-channels-list');
-            
-            // Hardcoded attractive channels with icons
             const channels = [
                 { name: "Telegram Channel", iconColor: "bg-blue-100 text-blue-600", icon: "send", link: "https://t.me/your_channel_link" },
                 { name: "WhatsApp Support", iconColor: "bg-green-100 text-green-600", icon: "message-circle", link: "https://wa.me/your_number" },
                 { name: "Online Chat", iconColor: "bg-orange-100 text-orange-600", icon: "message-square", link: "https://t.me/your_support_user" },
                 { name: "Email Support", iconColor: "bg-gray-100 text-gray-600", icon: "mail", link: "mailto:support@biggerserver.com" }
             ];
-
-            list.innerHTML = channels.map(c => `
-                <a href="${c.link}" target="_blank" class="support-item group">
-                    <div class="flex items-center">
-                        <div class="support-icon ${c.iconColor}">
-                            <i data-lucide="${c.icon}" class="w-6 h-6"></i>
-                        </div>
-                        <span class="font-bold text-sm text-gray-700">${c.name}</span>
-                    </div>
-                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 group-hover:text-indigo-500 transition-colors"></i>
-                </a>
-            `).join('');
+            list.innerHTML = channels.map(c => `<a href="${c.link}" target="_blank" class="support-item group"><div class="flex items-center"><div class="support-icon ${c.iconColor}"><i data-lucide="${c.icon}" class="w-6 h-6"></i></div><span class="font-bold text-sm text-gray-700">${c.name}</span></div><i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 group-hover:text-indigo-500 transition-colors"></i></a>`).join('');
             lucide.createIcons();
         }
 
@@ -1909,10 +1717,8 @@
             const pid = document.getElementById('report-purchase-id').value;
             const reason = document.getElementById('report-reason').value;
             const proof = document.getElementById('report-proof').value;
-            
             loader.style.display = 'flex';
             try {
-                // Reports to MAIN DB
                 await addDoc(collection(db, "replace_requests"), {
                     userId: userData.tgChatId, userName: userData.name, purchaseId: pid, reason, proof, status: 'pending', requestedAt: serverTimestamp(),
                     mailType: document.getElementById('report-modal-mail-type').textContent, cost: parseFloat(document.getElementById('report-purchase-cost').value)
@@ -1925,7 +1731,6 @@
         }
         
         async function loadReportHistory() {
-             // MAIN DB
              const list = document.getElementById('report-history-list');
              list.innerHTML = getLoadingHTML();
              const q = query(collection(db, "replace_requests"), where("userId", "==", userData.tgChatId), orderBy("requestedAt", "desc"));
@@ -1938,7 +1743,6 @@
         }
         
         async function loadReplaceRequests() {
-             // MAIN DB
              const list = document.getElementById('replace-requests-list');
              list.innerHTML = getLoadingHTML();
              const q = query(collection(db, "replace_requests"), where("status", "==", "pending"));
@@ -1951,7 +1755,6 @@
         }
         
         window.resolveReq = async (rid, uid, cost, pid, approve) => {
-             // MAIN DB
              if(!confirm(approve ? "Refund user?" : "Reject report?")) return;
              loader.style.display = 'flex';
              try {
