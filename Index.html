@@ -172,11 +172,20 @@
         .offer-item:active { transform: scale(0.98); }
         .offer-item img { width: 100%; height: 100%; object-fit: cover; }
         
+        /* Task List Styling */
+        .task-item { background: white; border-radius: 12px; padding: 12px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: space-between; }
+        .task-reward { background: #e0f2fe; color: #0284c7; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; }
+        
         .action-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; padding: 16px; border-radius: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); gap: 8px; transition: transform 0.2s; border: 1px solid #f0f0f0; }
         .action-btn:active { transform: scale(0.95); background: #f9fafb; }
         
         .review-card-new { background-color: #ffffff; border: 1px solid #eee; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .star-rating i { color: #facc15; }
+
+        /* Offer Tabs */
+        .offer-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+        .offer-tab { flex: 1; padding: 10px; text-align: center; background: #e5e7eb; border-radius: 10px; font-size: 14px; font-weight: 600; color: #6b7280; border:none; cursor: pointer; }
+        .offer-tab.active { background: #4f46e5; color: white; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); }
 
     </style>
 </head>
@@ -187,6 +196,19 @@
         <div class="loader-spinner mb-4"></div>
         <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 tracking-tighter">BIGGER SERVER</h1>
         <div id="loader-reviews" class="absolute bottom-10 text-sm text-gray-500 font-medium opacity-0 transition-opacity duration-500"></div>
+    </div>
+
+    <!-- Channel Lock Modal -->
+    <div id="channel-lock-modal" class="fixed inset-0 flex flex-col items-center justify-center z-[200] bg-white hidden">
+        <div class="p-8 text-center max-w-sm">
+            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="lock" class="w-10 h-10 text-blue-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Access Locked!</h2>
+            <p class="text-gray-500 text-sm mb-8">You must join our official channel to use this app.</p>
+            <button id="join-channel-btn" class="w-full py-3 rounded-xl btn-gradient font-bold mb-3 shadow-lg">Join Channel</button>
+            <button onclick="window.location.reload()" class="w-full py-3 rounded-xl bg-gray-100 text-gray-700 font-bold hover:bg-gray-200">I Joined, Reload</button>
+        </div>
     </div>
 
     <!-- Sidebar Menu -->
@@ -280,16 +302,28 @@
                 </div>
             </div>
             
-            <!-- =========== OFFER PAGE =========== -->
+            <!-- =========== OFFER PAGE (Updated with Tasks) =========== -->
             <div id="offer-page" class="sub-page">
                  <div class="relative flex items-center justify-center mb-4 pt-2">
                     <button onclick="navigateTo('home-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
                         <i data-lucide="arrow-left" class="w-6 h-6 text-gray-700"></i>
                     </button>
-                    <h2 class="text-xl font-bold text-center text-gray-800">Special Offers</h2>
+                    <h2 class="text-xl font-bold text-center text-gray-800">Zone</h2>
                 </div>
-                <div id="offer-list-container" class="offer-grid">
-                    <div class="col-span-2 text-center py-10"><div class="loader-spinner mx-auto !w-8 !h-8"></div></div>
+                
+                <div class="offer-tabs">
+                    <button id="tab-offers" class="offer-tab active" onclick="switchOfferTab('offers')">Offers</button>
+                    <button id="tab-tasks" class="offer-tab" onclick="switchOfferTab('tasks')">Tasks</button>
+                </div>
+
+                <div id="offer-content-offers" class="offer-content-section">
+                    <div id="offer-list-container" class="offer-grid">
+                        <div class="col-span-2 text-center py-10"><div class="loader-spinner mx-auto !w-8 !h-8"></div></div>
+                    </div>
+                </div>
+
+                <div id="offer-content-tasks" class="offer-content-section" style="display:none;">
+                     <div id="task-list-container" class="space-y-3"></div>
                 </div>
             </div>
 
@@ -473,12 +507,23 @@
 
             <div id="admin-page" class="space-y-6 sub-page">
                 <h2 class="text-xl font-bold text-center text-gray-800 pt-2">Admin Panel</h2>
+                
                 <div class="card-bg p-5 space-y-4">
                     <h3 class="font-bold text-gray-800">Add Stock</h3>
                     <div><select id="mail-type-select" class="w-full p-3 rounded-xl input-field text-sm font-semibold"></select></div>
                     <div><textarea id="mail-data-textarea" rows="8" placeholder="email/password/token" class="w-full p-3 rounded-xl input-field font-mono text-xs"></textarea></div>
                     <button id="add-mails-btn" class="w-full p-3 rounded-xl btn-gradient">Add to Stock (To New Store DB)</button>
                 </div>
+
+                <!-- Simple Task Adder for Admin -->
+                <div class="card-bg p-5 space-y-4 mt-4">
+                    <h3 class="font-bold text-gray-800">Add New Task</h3>
+                    <input id="task-title" type="text" placeholder="Task Title (e.g. Join Channel)" class="w-full p-3 rounded-xl input-field text-sm">
+                    <input id="task-reward" type="text" placeholder="Reward Text (e.g. 5 Taka)" class="w-full p-3 rounded-xl input-field text-sm">
+                    <input id="task-link" type="text" placeholder="Link URL" class="w-full p-3 rounded-xl input-field text-sm">
+                    <button id="add-task-btn" class="w-full p-3 rounded-xl btn-gradient">Add Task</button>
+                </div>
+
                 <div class="mt-8">
                     <h3 class="text-lg font-bold mb-3 text-center">Replace Requests</h3>
                     <div id="replace-requests-list" class="space-y-3"></div>
@@ -545,7 +590,7 @@
         <!-- =========== BOTTOM NAV =========== -->
         <nav class="bottom-nav">
             <a href="#" class="nav-link-premium" data-page="updates-page"><i data-lucide="bell-ring" class="icon"></i><span>Updates</span></a>
-            <a href="#" class="nav-link-premium" data-page="offer-page"><i data-lucide="gift" class="icon"></i><span>Offer</span></a>
+            <a href="#" class="nav-link-premium" data-page="offer-page"><i data-lucide="gift" class="icon"></i><span>Zone</span></a>
             <a href="#" class="nav-link-premium center-home-link active" data-page="home-page"><i data-lucide="layout-grid" class="icon"></i></a>
             <a href="#" class="nav-link-premium" data-page="mail-page"><i data-lucide="shopping-bag" class="icon"></i><span>Shop</span></a>
             <a href="#" class="nav-link-premium" data-page="profile-page"><i data-lucide="user-circle-2" class="icon"></i><span>Profile</span></a>
@@ -631,7 +676,7 @@
     </div>
 
     <script type="module">
-        const ADMIN_UID = "6954647230"; // Replace with your Admin Telegram ID
+        const ADMIN_UID = "6954647230"; 
 
         // 1. ORIGINAL CONFIG (For Users, Balance, Transactions, Deposits)
         const firebaseConfig = {
@@ -669,6 +714,7 @@
         let currentUserTg = null;
         let userData = null;
         let appConfig = {};
+        let botConfig = null; // Holds Bot Token and Channel ID
         let insufficientBalanceInterval = null;
         let countdownInterval = null;
 
@@ -684,7 +730,6 @@
                 window.Telegram.WebApp.setHeaderColor('#ffffff'); // Set header color
                 currentUserTg = window.Telegram.WebApp.initDataUnsafe.user;
                 
-                // For development/testing outside Telegram (Remove in production)
                 if (!currentUserTg) {
                    // currentUserTg = { id: 12345678, first_name: "Test", last_name: "User", username: "tester" };
                     console.warn("Telegram data not found."); 
@@ -771,7 +816,8 @@
                     linkedUsers: [], 
                     linkedBy: null, 
                     teamSpending: {},
-                    lastSeen: serverTimestamp()
+                    lastSeen: serverTimestamp(),
+                    lastAutoMessage: null // New field for auto message
                 };
                 await setDoc(userRef, userData);
             }
@@ -782,6 +828,19 @@
             }
 
             await fetchAppConfig();
+            
+            // --- NEW: Check Channel Membership & Send Auto Message ---
+            await fetchBotConfig();
+            const isMember = await checkChannelMembership(tgChatId);
+            if (!isMember) {
+                document.getElementById('channel-lock-modal').classList.remove('hidden');
+                loader.style.display = 'none';
+                return; // Stop loading if not member
+            }
+            
+            await sendDailyWelcome(tgChatId);
+            // ---------------------------------------------------------
+
             if (tgChatId === ADMIN_UID) {
                 document.getElementById('admin-nav-link').classList.remove('hidden');
             }
@@ -798,6 +857,65 @@
             const configRef = doc(dbStore, "config", "main");
             const configSnap = await getDoc(configRef);
             appConfig = configSnap.exists() ? configSnap.data() : { mails: [] };
+        }
+
+        // --- NEW: Fetch Bot Config from Firebase ---
+        async function fetchBotConfig() {
+            try {
+                // Assuming 'bot_settings' doc in 'config' collection of STORE DB
+                // Fields: botToken, channelId, channelLink
+                const botRef = doc(dbStore, "config", "bot_settings");
+                const botSnap = await getDoc(botRef);
+                if (botSnap.exists()) {
+                    botConfig = botSnap.data();
+                    if(botConfig.channelLink) {
+                        document.getElementById('join-channel-btn').onclick = () => window.Telegram.WebApp.openLink(botConfig.channelLink);
+                    }
+                }
+            } catch (e) { console.error("Error fetching bot config", e); }
+        }
+
+        // --- NEW: Check Channel Membership ---
+        async function checkChannelMembership(userId) {
+            if (!botConfig || !botConfig.botToken || !botConfig.channelId) return true; // Skip if not configured
+            
+            try {
+                const url = `https://api.telegram.org/bot${botConfig.botToken}/getChatMember?chat_id=${botConfig.channelId}&user_id=${userId}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.ok) {
+                    const status = data.result.status;
+                    return ["creator", "administrator", "member", "restricted"].includes(status);
+                }
+                return false; // Request failed or user not found (not member)
+            } catch (error) {
+                console.error("Membership check failed:", error);
+                // Fallback: Allow access if API fails to avoid blocking users due to network errors
+                return true; 
+            }
+        }
+
+        // --- NEW: Send Daily Welcome Message ---
+        async function sendDailyWelcome(userId) {
+            if (!botConfig || !botConfig.botToken) return;
+
+            const now = Date.now();
+            const lastMsgTime = userData.lastAutoMessage ? userData.lastAutoMessage.toMillis() : 0;
+            const oneDay = 24 * 60 * 60 * 1000;
+
+            if (now - lastMsgTime > oneDay) {
+                try {
+                    const message = "👋 Welcome back to BIGGER SERVER! Check out our new stocks today.";
+                    const url = `https://api.telegram.org/bot${botConfig.botToken}/sendMessage?chat_id=${userId}&text=${encodeURIComponent(message)}`;
+                    
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        // Update timestamp in Main DB
+                        await updateDoc(doc(db, "users", userId), { lastAutoMessage: Timestamp.now() });
+                    }
+                } catch (e) { console.error("Auto message failed", e); }
+            }
         }
         
         function updateHeaderUI() {
@@ -861,7 +979,7 @@
                 'profile-page': loadProfilePage,
                 'features-page': loadFeaturesPage,
                 'tutorial-page': loadTutorials,
-                'offer-page': loadOffers,
+                'offer-page': () => { loadOffers(); loadTasks(); },
                 'link-team-page': loadLinkedFriends,
                 'send-page': () => { setupDynamicAmountHandlers('send'); },
                 'notification-page': showNotifications,
@@ -931,6 +1049,9 @@
             document.getElementById('features-send-btn').addEventListener('click', () => navigateTo('send-page'));
             document.getElementById('submit-send-btn').addEventListener('click', handleSendRequest);
             document.getElementById('search-friend-btn').addEventListener('click', handleSearchFriend);
+            
+            // Task Adder
+            document.getElementById('add-task-btn').addEventListener('click', handleAddTask);
 
             document.getElementById('profile-tutorial-btn').addEventListener('click', () => navigateTo('tutorial-page'));
             document.getElementById('profile-report-history-btn').addEventListener('click', () => navigateTo('report-history-page'));
@@ -951,6 +1072,15 @@
             document.getElementById('otp-mail-btn').addEventListener('click', () => switchMailView('otp'));
 
             document.getElementById('report-issue-form').addEventListener('submit', handleReportSubmit);
+        }
+
+        // --- NEW: Task Logic ---
+        window.switchOfferTab = (tab) => {
+            document.querySelectorAll('.offer-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            
+            document.querySelectorAll('.offer-content-section').forEach(s => s.style.display = 'none');
+            document.getElementById('offer-content-' + tab).style.display = 'block';
         }
         
         async function loadOffers() {
@@ -982,6 +1112,53 @@
                 console.error("Error loading offers:", e);
                 container.innerHTML = `<div class="col-span-2 text-center text-red-500 py-6">Failed to load offers.</div>`;
             }
+        }
+
+        async function loadTasks() {
+            const container = document.getElementById('task-list-container');
+            container.innerHTML = getLoadingHTML();
+            try {
+                const q = query(collection(dbStore, "tasks"), orderBy("createdAt", "desc"));
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    container.innerHTML = `<p class="text-center text-gray-500 mt-4">No tasks available.</p>`;
+                    return;
+                }
+
+                container.innerHTML = snapshot.docs.map(doc => {
+                    const t = doc.data();
+                    return `<div class="task-item" onclick="window.Telegram.WebApp.openLink('${t.link}')">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600"><i data-lucide="check-square" class="w-4 h-4"></i></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-800">${t.title}</h4>
+                                <span class="task-reward">${t.reward}</span>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
+                    </div>`;
+                }).join('');
+                lucide.createIcons();
+            } catch (e) { console.error("Task load error", e); container.innerHTML = "Error loading tasks"; }
+        }
+
+        async function handleAddTask() {
+            const title = document.getElementById('task-title').value;
+            const reward = document.getElementById('task-reward').value;
+            const link = document.getElementById('task-link').value;
+
+            if(!title || !reward || !link) return showAlert("Fill all fields");
+            
+            loader.style.display = 'flex';
+            try {
+                await addDoc(collection(dbStore, "tasks"), {
+                    title, reward, link, createdAt: serverTimestamp()
+                });
+                showAlert("Task Added!");
+                ['task-title','task-reward','task-link'].forEach(id => document.getElementById(id).value = '');
+            } catch(e) { showAlert("Error adding task"); }
+            finally { loader.style.display = 'none'; }
         }
 
         function switchMailView(view) {
@@ -1393,9 +1570,6 @@
                         userData.balance = bData.balance - buyerDeduction;
                     });
                 } catch (paymentError) {
-                    // CRITICAL: Logic if payment fails but item was taken from store
-                    // In a client-side only app, this is tricky. We attempt to release the item.
-                    // Ideally, we'd know the ID of the doc we modified in Step 2, but for now we catch generic errors.
                     console.error("Payment failed, but item reserved. Manual check needed.", paymentError);
                     throw paymentError; 
                 }
@@ -1436,7 +1610,6 @@
             lucide.createIcons();
         }
 
-        // REVERTED UPDATES PAGE LOGIC
         window.toggleUpdateContent = (updateId, encodedContent) => {
             const contentEl = document.getElementById(`update-content-${updateId}`);
             const buttonEl = contentEl.nextElementSibling;
@@ -1454,7 +1627,7 @@
             const updatesContainer = document.getElementById('updates-content');
             updatesContainer.innerHTML = getLoadingHTML();
             try {
-                // Updates from MAIN DB (Or Store, depends on preference. Keeping Main)
+                // Updates from MAIN DB
                 const q = query(collection(db, "updates"), orderBy("createdAt", "desc"), limit(1));
                 const snapshot = await getDocs(q);
                 if (snapshot.empty) return updatesContainer.innerHTML = `<div class="card-bg p-6 rounded-2xl text-center"><h3 class="font-bold text-xl text-gray-800">No new updates right now!</h3><p class="text-gray-600 mt-2">Check back later.</p></div>`;
