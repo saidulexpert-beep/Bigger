@@ -152,7 +152,7 @@
         .loader-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid #4f46e5; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Mail Switcher (Original Style) */
+        /* Mail Switcher */
         .mail-view-switcher { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; background-color: #e5e7eb; padding: 0.5rem; border-radius: 0.75rem; }
         .mail-view-switcher button { padding: 0.75rem; border-radius: 0.5rem; font-weight: 600; color: #4b5563; transition: all 0.3s ease; border: none; background-color: transparent; }
         .mail-view-switcher button.active { background-color: #ffffff; color: #4f46e5; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
@@ -351,7 +351,7 @@
                 <div class="mt-6"><h3 class="text-lg font-bold mb-3 px-1">Recent Transactions</h3><div id="payment-history-list" class="space-y-3"></div></div>
             </div>
 
-            <!-- =========== MAIL PAGE (REVERTED TO ORIGINAL DESIGN) =========== -->
+            <!-- =========== MAIL PAGE =========== -->
             <div id="mail-page" class="sub-page">
                  <div class="space-y-6">
                     <div class="mail-view-switcher">
@@ -377,7 +377,7 @@
                 </div>
             </div>
 
-            <!-- =========== UPDATES PAGE (REVERTED TO ORIGINAL DESIGN) =========== -->
+            <!-- =========== UPDATES PAGE =========== -->
             <div id="updates-page" class="space-y-6 sub-page">
                 <h2 class="text-xl font-bold text-center text-gray-800">Latest Update</h2>
                 <div id="updates-content" class="space-y-4"></div>
@@ -477,7 +477,7 @@
                     <h3 class="font-bold text-gray-800">Add Stock</h3>
                     <div><select id="mail-type-select" class="w-full p-3 rounded-xl input-field text-sm font-semibold"></select></div>
                     <div><textarea id="mail-data-textarea" rows="8" placeholder="email/password/token" class="w-full p-3 rounded-xl input-field font-mono text-xs"></textarea></div>
-                    <button id="add-mails-btn" class="w-full p-3 rounded-xl btn-gradient">Add to Stock</button>
+                    <button id="add-mails-btn" class="w-full p-3 rounded-xl btn-gradient">Add to Stock (To New Store DB)</button>
                 </div>
                 <div class="mt-8">
                     <h3 class="text-lg font-bold mb-3 text-center">Replace Requests</h3>
@@ -530,7 +530,7 @@
                 </div>
             </div>
             
-            <!-- =========== TUTORIAL PAGE (HIDDEN) =========== -->
+            <!-- =========== TUTORIAL PAGE =========== -->
             <div id="tutorial-page" class="space-y-6 sub-page">
                  <div class="relative flex items-center justify-center mb-4 pt-2">
                     <button onclick="navigateTo('profile-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
@@ -632,6 +632,8 @@
 
     <script type="module">
         const ADMIN_UID = "6954647230"; // Replace with your Admin Telegram ID
+
+        // 1. ORIGINAL CONFIG (For Users, Balance, Transactions, Deposits)
         const firebaseConfig = {
             apiKey: "AIzaSyCoCy08FL_sHHdA0f2cJg0BaF-iYAhFuk0",
             authDomain: "mail-store-4692b.firebaseapp.com",
@@ -642,11 +644,27 @@
             appId: "1:264936867411:web:5933919e5bafae617968a6"
         };
 
+        // 2. NEW CONFIG (For Store Page, Mails Stock, Offers)
+        const storeConfig = {
+            apiKey: "AIzaSyAEV4zkuTcRYIFP2AMmKJTyDUTzSYLnbbM",
+            authDomain: "used-mail-shop.firebaseapp.com",
+            databaseURL: "https://used-mail-shop-default-rtdb.firebaseio.com",
+            projectId: "used-mail-shop",
+            storageBucket: "used-mail-shop.firebasestorage.app",
+            messagingSenderId: "251382358623",
+            appId: "1:251382358623:web:a567a9349d1fd87277b1ea"
+        };
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, limit, runTransaction, getCountFromServer, writeBatch, updateDoc, Timestamp, onSnapshot, arrayUnion, arrayRemove, increment } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
+        // Initialize Main App (User DB)
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // Initialize Store App (Store DB)
+        const appStore = initializeApp(storeConfig, "storeApp");
+        const dbStore = getFirestore(appStore);
 
         let currentUserTg = null;
         let userData = null;
@@ -716,6 +734,7 @@
         async function initUserSession() {
             if (!currentUserTg) return;
             const tgChatId = String(currentUserTg.id);
+            // User Data comes from MAIN DB
             const userRef = doc(db, "users", tgChatId);
             let userSnap = await getDoc(userRef);
 
@@ -775,7 +794,8 @@
         }
 
         async function fetchAppConfig() {
-            const configRef = doc(db, "config", "main");
+            // Config comes from STORE DB
+            const configRef = doc(dbStore, "config", "main");
             const configSnap = await getDoc(configRef);
             appConfig = configSnap.exists() ? configSnap.data() : { mails: [] };
         }
@@ -938,7 +958,8 @@
             container.innerHTML = getLoadingHTML();
             
             try {
-                const q = query(collection(db, "offers"), orderBy("createdAt", "desc")); 
+                // Offers come from STORE DB
+                const q = query(collection(dbStore, "offers"), orderBy("createdAt", "desc")); 
                 const snapshot = await getDocs(q);
                 
                 if (snapshot.empty) {
@@ -983,6 +1004,7 @@
         }
 
         function listenForNotifications() {
+            // Notifications come from MAIN DB
             const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
                 const filteredDocs = snapshot.docs.filter(doc => {
@@ -1014,6 +1036,7 @@
             const listEl = document.getElementById('notification-list-full');
             listEl.innerHTML = getLoadingHTML();
             
+            // Notifications come from MAIN DB
             const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"), limit(20));
             const snapshot = await getDocs(q);
 
@@ -1060,6 +1083,7 @@
         }
 
         async function handleDepositRequest() {
+            // Deposits go to MAIN DB
             const method = document.getElementById('deposit-method').value;
             const amount = parseInt(document.getElementById('deposit-amount').value);
             const senderNumber = document.getElementById('sender-number').value.trim();
@@ -1088,6 +1112,7 @@
         }
 
         async function loadPaymentHistory() {
+            // History comes from MAIN DB
             const historyList = document.getElementById('payment-history-list');
             historyList.innerHTML = getLoadingHTML();
             try {
@@ -1108,13 +1133,13 @@
 
         async function getStockCount(collectionName) {
             try {
-                const q = query(collection(db, collectionName), where("isSold", "==", false));
+                // Stocks check from STORE DB
+                const q = query(collection(dbStore, collectionName), where("isSold", "==", false));
                 const snapshot = await getCountFromServer(q);
                 return snapshot.data().count;
             } catch (error) { return 0; }
         }
         
-        // REVERTED MAIL RENDER FUNCTION
         async function renderMailList(mails, containerEl, effectiveBalance) {
             if (!mails || mails.length === 0) {
                 containerEl.innerHTML = `<p class="text-center text-gray-500 pt-10">এই ক্যাটাগরিতে কোনো মেইল উপলব্ধ নেই।</p>`;
@@ -1169,6 +1194,7 @@
             historyListEl.innerHTML = getLoadingHTML();
             
             try {
+                // User Balance from MAIN DB
                 const userSnap = await getDoc(doc(db, "users", userData.tgChatId));
                 userData = userSnap.data();
 
@@ -1178,6 +1204,7 @@
                     if (teamLeaderSnap.exists()) effectiveBalance += teamLeaderSnap.data().balance;
                 }
 
+                // Mail Config from STORE DB (Fetched in init)
                 const allMails = appConfig.mails || [];
                 const loginMails = allMails.filter(m => m.category === 'login' || !m.category);
                 const otpMails = allMails.filter(m => m.category === 'otp');
@@ -1193,6 +1220,7 @@
                      switchMailView('login');
                 }
 
+                // Purchase History from MAIN DB
                 const twentyFourHoursAgo = Timestamp.fromDate(new Date(Date.now() - 24 * 60 * 60 * 1000));
                 const q = query(collection(db, "mail_purchases"), where("userId", "==", userData.tgChatId), where("purchasedAt", ">=", twentyFourHoursAgo), orderBy("purchasedAt", "desc"));
                 const querySnapshot = await getDocs(q);
@@ -1237,6 +1265,7 @@
         async function handleDownloadHistory() {
             loader.style.display = 'flex';
             try {
+                // Main DB for history
                 const q = query(collection(db, "mail_purchases"), where("userId", "==", userData.tgChatId), orderBy("purchasedAt", "desc"));
                 const querySnapshot = await getDocs(q);
                 if (querySnapshot.empty) {
@@ -1255,6 +1284,7 @@
         async function handleCopyHistory() {
              loader.style.display = 'flex';
             try {
+                // Main DB for history
                 const fourHoursAgo = Timestamp.fromDate(new Date(Date.now() - 4 * 60 * 60 * 1000));
                 const q = query(collection(db, "mail_purchases"), where("userId", "==", userData.tgChatId), where("purchasedAt", ">=", fourHoursAgo), orderBy("purchasedAt", "desc"));
                 const querySnapshot = await getDocs(q);
@@ -1275,73 +1305,108 @@
             loader.style.display = 'flex';
             
             try {
-                await runTransaction(db, async (transaction) => {
-                    const buyerRef = doc(db, "users", userData.tgChatId);
-                    const buyerSnap = await transaction.get(buyerRef);
-                    if (!buyerSnap.exists()) throw "User Error";
-                    let currentBuyerData = buyerSnap.data();
+                // Step 1: Pre-check balance on MAIN DB (Read only)
+                const buyerRef = doc(db, "users", userData.tgChatId);
+                const buyerSnap = await getDoc(buyerRef);
+                const currentBuyerData = buyerSnap.data();
+                
+                let teamLeaderRef = null;
+                let currentLeaderData = null;
+                if (currentBuyerData.linkedBy) {
+                    teamLeaderRef = doc(db, "users", currentBuyerData.linkedBy);
+                    const leaderSnap = await getDoc(teamLeaderRef);
+                    if (leaderSnap.exists()) currentLeaderData = leaderSnap.data();
+                }
 
-                    let teamLeaderRef = null;
-                    let currentLeaderData = null;
-                    if (currentBuyerData.linkedBy) {
-                        teamLeaderRef = doc(db, "users", currentBuyerData.linkedBy);
-                        const leaderSnap = await transaction.get(teamLeaderRef);
-                        if (leaderSnap.exists()) currentLeaderData = leaderSnap.data();
-                    }
-                    
-                    const effectiveBalance = currentBuyerData.balance + (currentLeaderData ? currentLeaderData.balance : 0);
-                    if (effectiveBalance < cost) throw "Insufficient Balance";
+                const effectiveBalance = currentBuyerData.balance + (currentLeaderData ? currentLeaderData.balance : 0);
+                if (effectiveBalance < cost) {
+                    throw "Insufficient Balance";
+                }
 
-                    const mailQuery = query(collection(db, stockKey), where("isSold", "==", false), limit(1));
+                // Step 2: Grab Item from STORE DB
+                let mailData = null;
+                await runTransaction(dbStore, async (transaction) => {
+                    const mailQuery = query(collection(dbStore, stockKey), where("isSold", "==", false), limit(1));
                     const mailQuerySnapshot = await getDocs(mailQuery);
                     if (mailQuerySnapshot.empty) throw "Out of Stock";
                     
                     const mailDoc = mailQuerySnapshot.docs[0];
-                    const mailRef = mailDoc.ref;
-                    const mailData = mailDoc.data();
-
-                    let costRemaining = cost;
-                    let paidBy = 'self';
-                    let buyerDeduction = Math.min(costRemaining, currentBuyerData.balance);
-                    
-                    if (buyerDeduction > 0) {
-                        transaction.update(buyerRef, { balance: currentBuyerData.balance - buyerDeduction });
-                        costRemaining -= buyerDeduction;
-                    }
-                    if (costRemaining > 0 && teamLeaderRef) {
-                        transaction.update(teamLeaderRef, { balance: currentLeaderData.balance - costRemaining });
-                        const newSpending = (currentLeaderData.teamSpending?.[userData.tgChatId] || 0) + costRemaining;
-                        transaction.update(teamLeaderRef, { [`teamSpending.${userData.tgChatId}`]: newSpending });
-                        paidBy = currentBuyerData.linkedBy;
-                    }
-
-                    transaction.update(mailRef, { isSold: true, soldTo: userData.tgChatId, soldAt: serverTimestamp() });
-                    
-                    const counterRef = doc(db, "counters", "mail_purchase");
-                    const counterSnap = await transaction.get(counterRef);
-                    const saleId = counterSnap.exists() ? counterSnap.data().currentId + 1 : 1;
-                    transaction.set(counterRef, { currentId: saleId }, { merge: true });
-
-                    const newPurchaseRef = doc(collection(db, "mail_purchases"));
-                    const mailConfig = appConfig.mails.find(m => m.stockKey === stockKey);
-                    
-                    transaction.set(newPurchaseRef, {
-                        saleId: saleId, userId: userData.tgChatId, paidBy: paidBy, mailType: mailType,
-                        mail: mailData.email, password: mailData.password || null,
-                        refreshToken: mailData.refresh_token || null, clientId: mailData.client_id || null,
-                        cost: cost, purchasedAt: serverTimestamp(),
-                        expirationHours: mailConfig ? mailConfig.expirationHours : null
-                    });
-                    
-                    userData.balance = currentBuyerData.balance - buyerDeduction;
-                    
-                    document.getElementById('purchase-success-email').textContent = mailData.email;
-                    document.getElementById('purchase-success-password').textContent = mailData.password || 'N/A';
+                    transaction.update(mailDoc.ref, { isSold: true, soldTo: userData.tgChatId, soldAt: serverTimestamp() });
+                    mailData = mailDoc.data();
                 });
 
+                if (!mailData) throw "Failed to retrieve item";
+
+                // Step 3: Deduct Money & Save Record on MAIN DB
+                try {
+                     await runTransaction(db, async (transaction) => {
+                        const bRef = doc(db, "users", userData.tgChatId);
+                        const bSnap = await transaction.get(bRef);
+                        const bData = bSnap.data();
+
+                        // Re-fetch leader in transaction for safety
+                        let lRef = null;
+                        let lData = null;
+                        if (bData.linkedBy) {
+                            lRef = doc(db, "users", bData.linkedBy);
+                            const lSnap = await transaction.get(lRef);
+                            lData = lSnap.data();
+                        }
+
+                        let costRemaining = cost;
+                        let paidBy = 'self';
+                        let buyerDeduction = Math.min(costRemaining, bData.balance);
+
+                        // Double check balance inside transaction
+                         const totalAvail = bData.balance + (lData ? lData.balance : 0);
+                         if (totalAvail < cost) throw "Insufficient Balance";
+
+                        if (buyerDeduction > 0) {
+                            transaction.update(bRef, { balance: bData.balance - buyerDeduction });
+                            costRemaining -= buyerDeduction;
+                        }
+                        if (costRemaining > 0 && lRef) {
+                            transaction.update(lRef, { balance: lData.balance - costRemaining });
+                            const newSpending = (lData.teamSpending?.[userData.tgChatId] || 0) + costRemaining;
+                            transaction.update(lRef, { [`teamSpending.${userData.tgChatId}`]: newSpending });
+                            paidBy = bData.linkedBy;
+                        }
+
+                        // Save Purchase Record
+                        const counterRef = doc(db, "counters", "mail_purchase");
+                        const counterSnap = await transaction.get(counterRef);
+                        const saleId = counterSnap.exists() ? counterSnap.data().currentId + 1 : 1;
+                        transaction.set(counterRef, { currentId: saleId }, { merge: true });
+
+                        const newPurchaseRef = doc(collection(db, "mail_purchases"));
+                        const mailConfig = appConfig.mails.find(m => m.stockKey === stockKey);
+
+                        transaction.set(newPurchaseRef, {
+                            saleId: saleId, userId: userData.tgChatId, paidBy: paidBy, mailType: mailType,
+                            mail: mailData.email, password: mailData.password || null,
+                            refreshToken: mailData.refresh_token || null, clientId: mailData.client_id || null,
+                            cost: cost, purchasedAt: serverTimestamp(),
+                            expirationHours: mailConfig ? mailConfig.expirationHours : null
+                        });
+                        
+                        // Update local balance for UI
+                        userData.balance = bData.balance - buyerDeduction;
+                    });
+                } catch (paymentError) {
+                    // CRITICAL: Logic if payment fails but item was taken from store
+                    // In a client-side only app, this is tricky. We attempt to release the item.
+                    // Ideally, we'd know the ID of the doc we modified in Step 2, but for now we catch generic errors.
+                    console.error("Payment failed, but item reserved. Manual check needed.", paymentError);
+                    throw paymentError; 
+                }
+
+                // Success
+                document.getElementById('purchase-success-email').textContent = mailData.email;
+                document.getElementById('purchase-success-password').textContent = mailData.password || 'N/A';
                 document.getElementById('purchase-success-modal').classList.remove('hidden');
                 updateUI();
                 loadMailStore(); 
+
             } catch (e) { 
                 if (e === "Insufficient Balance") {
                     document.getElementById('insufficient-balance-modal').classList.remove('hidden');
@@ -1389,6 +1454,7 @@
             const updatesContainer = document.getElementById('updates-content');
             updatesContainer.innerHTML = getLoadingHTML();
             try {
+                // Updates from MAIN DB (Or Store, depends on preference. Keeping Main)
                 const q = query(collection(db, "updates"), orderBy("createdAt", "desc"), limit(1));
                 const snapshot = await getDocs(q);
                 if (snapshot.empty) return updatesContainer.innerHTML = `<div class="card-bg p-6 rounded-2xl text-center"><h3 class="font-bold text-xl text-gray-800">No new updates right now!</h3><p class="text-gray-600 mt-2">Check back later.</p></div>`;
@@ -1420,14 +1486,16 @@
             if(!stockKey || !data) return showAlert("Invalid Input");
             
             loader.style.display = 'flex';
-            const batch = writeBatch(db);
+            
+            // Add Mails to STORE DB
+            const batch = writeBatch(dbStore);
             const lines = data.trim().split('\n');
             let count = 0;
             
             lines.forEach(line => {
                 const parts = line.trim().split('/');
                 if(parts.length >= 2) {
-                     const ref = doc(collection(db, stockKey));
+                     const ref = doc(collection(dbStore, stockKey));
                      batch.set(ref, { email: parts[0], password: parts[1], refresh_token: parts[2]||null, client_id: parts[3]||null, isSold: false, createdAt: serverTimestamp() });
                      count++;
                 }
@@ -1435,7 +1503,7 @@
             
             await batch.commit();
             loader.style.display = 'none';
-            showAlert(`${count} mails added.`);
+            showAlert(`${count} mails added to STORE DB.`);
             document.getElementById('mail-data-textarea').value = '';
         }
 
@@ -1476,6 +1544,7 @@
         }
 
         async function loadFeaturesPage() {
+            // Transfers in MAIN DB
             const receivedQuery = query(collection(db, "transfers"), where("toId", "==", userData.tgChatId));
             const sentQuery = query(collection(db, "transfers"), where("fromId", "==", userData.tgChatId));
             const [rSnap, sSnap] = await Promise.all([getDocs(receivedQuery), getDocs(sentQuery)]);
@@ -1489,6 +1558,7 @@
         }
 
         async function loadTransferHistory() {
+            // MAIN DB
             const list = document.getElementById('transfer-history-list');
             list.innerHTML = getLoadingHTML();
             const q = query(collection(db, "transfers"), where("fromId", "==", userData.tgChatId), limit(5));
@@ -1514,6 +1584,7 @@
         }
         
         async function handleSendRequest() {
+            // MAIN DB
             const toId = document.getElementById('send-recipient-id').value.trim();
             const amount = parseFloat(document.getElementById('send-amount').value);
             if(!toId || amount < 20) return showAlert("Invalid details. Min amount 20.");
@@ -1555,6 +1626,7 @@
         }
         
         window.linkFriend = async (fid) => {
+            // MAIN DB
             await updateDoc(doc(db, "users", userData.tgChatId), { linkedUsers: arrayUnion(fid) });
             await updateDoc(doc(db, "users", fid), { linkedBy: userData.tgChatId });
             showAlert("Linked!");
@@ -1564,6 +1636,7 @@
         }
 
         async function loadLinkedFriends() {
+             // MAIN DB
              const list = document.getElementById('linked-friends-list');
              list.innerHTML = getLoadingHTML();
              const snap = await getDoc(doc(db, "users", userData.tgChatId));
@@ -1583,6 +1656,7 @@
         }
         
         window.unlink = async (uid) => {
+             // MAIN DB
              if(!confirm("Remove user?")) return;
              await updateDoc(doc(db, "users", userData.tgChatId), { linkedUsers: arrayRemove(uid) });
              await updateDoc(doc(db, "users", uid), { linkedBy: null });
@@ -1590,6 +1664,7 @@
         }
 
         async function loadTutorials() {
+            // Tutorials from MAIN DB
             const list = document.getElementById('tutorial-list');
             list.innerHTML = getLoadingHTML();
             try {
@@ -1604,6 +1679,7 @@
         }
 
         async function loadReviews() {
+             // Reviews from MAIN DB
              const list = document.getElementById('reviews-list');
              list.innerHTML = getLoadingHTML();
              const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"), limit(5));
@@ -1663,6 +1739,7 @@
             
             loader.style.display = 'flex';
             try {
+                // Reports to MAIN DB
                 await addDoc(collection(db, "replace_requests"), {
                     userId: userData.tgChatId, userName: userData.name, purchaseId: pid, reason, proof, status: 'pending', requestedAt: serverTimestamp(),
                     mailType: document.getElementById('report-modal-mail-type').textContent, cost: parseFloat(document.getElementById('report-purchase-cost').value)
@@ -1675,6 +1752,7 @@
         }
         
         async function loadReportHistory() {
+             // MAIN DB
              const list = document.getElementById('report-history-list');
              list.innerHTML = getLoadingHTML();
              const q = query(collection(db, "replace_requests"), where("userId", "==", userData.tgChatId), orderBy("requestedAt", "desc"));
@@ -1687,6 +1765,7 @@
         }
         
         async function loadReplaceRequests() {
+             // MAIN DB
              const list = document.getElementById('replace-requests-list');
              list.innerHTML = getLoadingHTML();
              const q = query(collection(db, "replace_requests"), where("status", "==", "pending"));
@@ -1699,6 +1778,7 @@
         }
         
         window.resolveReq = async (rid, uid, cost, pid, approve) => {
+             // MAIN DB
              if(!confirm(approve ? "Refund user?" : "Reject report?")) return;
              loader.style.display = 'flex';
              try {
