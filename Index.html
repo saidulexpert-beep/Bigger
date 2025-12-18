@@ -3,25 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIGGER SERVER</title>
+    <title>Earn Fire - Premium Store</title>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #FFD700 0%, #FDB931 50%, #C06C02 100%);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+        }
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
-            color: #333333;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #1a1a1a;
             -webkit-user-select: none;
             -ms-user-select: none;
             user-select: none;
             -webkit-touch-callout: none;
             padding-bottom: 80px;
         }
+        /* Premium Text Gradient */
+        .text-premium {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            text-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+        }
+        
         input, textarea, #mail-details-content, #mail-purchase-history .font-mono, .selectable-text {
             -webkit-user-select: text;
             -ms-user-select: text;
@@ -30,35 +44,30 @@
         }
         .card-bg {
             background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .text-accent-gradient {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            border: 1px solid #f0f0f0;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .btn-gradient {
-            background-image: linear-gradient(135deg, #2563eb, #4f46e5);
-            color: #ffffff;
+            background: linear-gradient(135deg, #111827, #374151);
+            color: #FFD700;
             font-weight: 600;
-            box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             transition: all 0.2s ease;
-            border: none;
+            border: 1px solid #4b5563;
         }
         .btn-gradient:active { transform: scale(0.97); }
+        
         .input-field {
-            background-color: #f3f4f6;
-            border: 1px solid #e5e7eb;
+            background-color: #ffffff;
+            border: 2px solid #e5e7eb;
             color: #1f2937;
             transition: all 0.2s ease;
         }
         .input-field:focus {
-            border-color: #4f46e5;
-            background-color: #fff;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            border-color: #FDB931;
+            box-shadow: 0 0 0 4px rgba(253, 185, 49, 0.1);
             outline: none;
         }
         .main-page { display: none; }
@@ -67,10 +76,10 @@
         .sub-page.active { display: block; animation: fadeIn 0.3s ease-out; }
 
         .bottom-nav {
-             background: rgba(255, 255, 255, 0.95);
-             backdrop-filter: blur(12px);
-             -webkit-backdrop-filter: blur(12px);
-             border-top: 1px solid rgba(229, 231, 235, 0.5);
+             background: rgba(255, 255, 255, 0.85);
+             backdrop-filter: blur(20px);
+             -webkit-backdrop-filter: blur(20px);
+             border-top: 1px solid rgba(255, 255, 255, 0.5);
              position: fixed;
              bottom: 0;
              left: 0;
@@ -82,7 +91,7 @@
              align-items: center;
              padding: 10px 16px 20px 16px;
              z-index: 50;
-             box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
+             box-shadow: 0 -4px 30px rgba(0,0,0,0.05);
         }
         .nav-link-premium { 
             display: flex; flex-direction: column; align-items: center; gap: 4px; 
@@ -90,24 +99,24 @@
             padding: 8px; border-radius: 12px; transition: all 0.2s ease; 
             position: relative; cursor: pointer; background: none; border: none; 
         }
-        .nav-link-premium.active { color: #4f46e5; transform: translateY(-2px); }
+        .nav-link-premium.active { color: #d97706; transform: translateY(-2px); }
         .nav-link-premium .icon { width: 22px; height: 22px; stroke-width: 2.5px; }
         
         .center-home-link { 
             position: relative; top: -25px; 
-            background: linear-gradient(135deg, #2563eb, #4f46e5);
-            border: 4px solid #f0f2f5;
-            border-radius: 50%; width: 56px; height: 56px; 
+            background: linear-gradient(135deg, #111827, #000000);
+            border: 4px solid #f8f9fa;
+            border-radius: 50%; width: 60px; height: 60px; 
             display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4); 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); 
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            color: #ffffff;
+            color: #FFD700;
         }
         
         .header {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(0,0,0,0.03);
             padding: 1rem;
             position: sticky;
             top: 0;
@@ -116,88 +125,128 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .banner-wrapper { position: relative; width: 100%; padding-top: 50%; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2); }
+        .banner-wrapper { position: relative; width: 100%; padding-top: 50%; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.15); }
         .banner-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
         .slide { min-width: 100%; position: relative; }
         .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .dots { position: absolute; bottom: 10px; width: 100%; text-align: center; z-index: 10; display: flex; justify-content: center; gap: 6px; }
         .dot { height: 6px; width: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; transition: all 0.3s; }
-        .dot.active { background: #fff; width: 20px; border-radius: 10px; }
+        .dot.active { background: #FFD700; width: 20px; border-radius: 10px; }
 
         .credit-card-bg {
-            background: linear-gradient(110deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 20px;
-            color: white;
+            background: linear-gradient(125deg, #000000, #1a1a1a, #2d2d2d);
+            border-radius: 24px;
+            color: #FFD700;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 15px 35px -10px rgba(15, 23, 42, 0.5);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
+            border: 1px solid #333;
         }
         .credit-card-bg::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 60%);
             transform: rotate(30deg); pointer-events: none;
         }
-        .chip { width: 40px; height: 30px; background: linear-gradient(135deg, #fbbf24, #d97706); border-radius: 6px; position: relative; overflow: hidden; }
-        .chip::after { content: ''; position: absolute; inset: 0; border: 1px solid rgba(0,0,0,0.2); border-radius: 6px; background: repeating-linear-gradient(90deg, transparent 0, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 3px); }
+        .chip { width: 45px; height: 32px; background: linear-gradient(135deg, #FFD700, #B8860B); border-radius: 8px; position: relative; overflow: hidden; box-shadow: inset 0 0 5px rgba(0,0,0,0.2); }
+        .chip::after { content: ''; position: absolute; inset: 0; border: 1px solid rgba(0,0,0,0.2); border-radius: 8px; background: repeating-linear-gradient(90deg, transparent 0, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 3px); }
 
-        /* Loader */
-        #loader { background: #ffffff; z-index: 100; }
-        .loader-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid #4f46e5; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
+        /* ========= PREMIUM LOADER ========= */
+        #loader { 
+            background: #ffffff; 
+            z-index: 100; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .loader-logo-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .loader-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top-color: #FFD700;
+            border-right-color: #1a1a1a;
+            border-radius: 50%;
+            animation: spin-slow 2s linear infinite;
+        }
+        .loader-ring:nth-child(2) {
+            width: 70%;
+            height: 70%;
+            border-top-color: #1a1a1a;
+            border-right-color: #FFD700;
+            animation: spin-reverse 1.5s linear infinite;
+        }
+        .loader-icon {
+            font-size: 2rem;
+            color: #1a1a1a;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes spin-slow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.8; transform: scale(0.95); } }
+        
         /* Sidebar Menu - RIGHT SIDE */
         #slide-out-menu {
             position: fixed;
             top: 0;
-            right: 0; /* Changed from left:0 to right:0 */
+            right: 0;
             left: auto;
             width: 280px;
             height: 100%;
             background: #ffffff;
             z-index: 60;
-            transform: translateX(100%); /* Start hidden on the right */
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
-            box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+            box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+            border-left: 1px solid #f0f0f0;
         }
         #slide-out-menu.open { transform: translateX(0); }
         #menu-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.3);
             z-index: 55;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(4px);
         }
 
         /* Mail Switcher */
         .mail-view-switcher { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
-            gap: 10px; 
-            background-color: #f3f4f6; 
-            padding: 10px; 
-            border-radius: 12px; 
+            gap: 12px; 
+            background-color: #ffffff; 
+            padding: 5px; 
+            border-radius: 16px; 
+            border: 1px solid #f0f0f0;
         }
         .mail-view-switcher button { 
             padding: 12px; 
-            border-radius: 10px; 
+            border-radius: 12px; 
             font-weight: 700; 
             font-size: 0.8rem; 
-            color: #4b5563; 
-            background-color: #ffffff;
-            border: 1px solid #e5e7eb;
+            color: #6b7280; 
+            background-color: transparent;
+            border: none;
             transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
         .mail-view-switcher button.active { 
-            background: linear-gradient(135deg, #2563eb, #4f46e5); 
-            color: #ffffff; 
-            border-color: transparent;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.4);
+            background: #111827;
+            color: #FFD700; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         .support-item {
@@ -206,7 +255,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.02); border: 1px solid #f3f4f6;
             transition: all 0.2s; text-decoration: none; color: #1f2937;
         }
-        .support-item:hover { transform: translateX(-5px); border-color: #4f46e5; }
+        .support-item:hover { transform: translateX(-5px); border-color: #d97706; }
         .support-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
         
         .offer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -215,34 +264,39 @@
         .offer-item img { width: 100%; height: 100%; object-fit: cover; }
         
         .task-item { background: white; border-radius: 12px; padding: 12px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: space-between; }
-        .task-reward { background: #e0f2fe; color: #0284c7; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; }
+        .task-reward { background: #FFFBEB; color: #d97706; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; border: 1px solid #FEF3C7; }
         
-        .action-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; padding: 16px; border-radius: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); gap: 8px; transition: transform 0.2s; border: 1px solid #f0f0f0; }
+        .action-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; padding: 16px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); gap: 8px; transition: transform 0.2s; border: 1px solid #f0f0f0; }
         .action-btn:active { transform: scale(0.95); background: #f9fafb; }
         
         .review-card-new { background-color: #ffffff; border: 1px solid #eee; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .star-rating i { color: #facc15; }
 
         .offer-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-        .offer-tab { flex: 1; padding: 10px; text-align: center; background: #e5e7eb; border-radius: 10px; font-size: 14px; font-weight: 600; color: #6b7280; border:none; cursor: pointer; }
-        .offer-tab.active { background: #4f46e5; color: white; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); }
+        .offer-tab { flex: 1; padding: 12px; text-align: center; background: #ffffff; border-radius: 12px; font-size: 14px; font-weight: 600; color: #6b7280; border: 1px solid #f0f0f0; cursor: pointer; }
+        .offer-tab.active { background: #111827; color: #FFD700; border-color: #111827; }
 
     </style>
 </head>
 <body class="max-w-md mx-auto min-h-screen relative">
 
-    <!-- Loading Screen -->
+    <!-- Premium Loading Screen -->
     <div id="loader" class="fixed inset-0 flex flex-col items-center justify-center z-[100]">
-        <div class="loader-spinner mb-4"></div>
-        <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 tracking-tighter">BIGGER SERVER</h1>
-        <div id="loader-reviews" class="absolute bottom-10 text-sm text-gray-500 font-medium opacity-0 transition-opacity duration-500"></div>
+        <div class="loader-logo-container">
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <i data-lucide="flame" class="loader-icon w-8 h-8 fill-yellow-400"></i>
+        </div>
+        <h1 class="text-3xl font-black text-premium tracking-widest mb-2">EARN FIRE</h1>
+        <p class="text-[10px] text-gray-400 font-mono tracking-[0.3em] uppercase">Premium Digital Store</p>
+        <div id="loader-reviews" class="absolute bottom-12 text-xs text-gray-500 font-medium opacity-0 transition-opacity duration-500 italic"></div>
     </div>
 
     <!-- Channel Lock Modal -->
     <div id="channel-lock-modal" class="fixed inset-0 flex flex-col items-center justify-center z-[200] bg-white hidden">
         <div class="p-8 text-center max-w-sm">
-            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i data-lucide="lock" class="w-10 h-10 text-blue-600"></i>
+            <div class="w-20 h-20 bg-yellow-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="lock" class="w-10 h-10 text-yellow-600"></i>
             </div>
             <h2 class="text-2xl font-bold text-gray-800 mb-2">Access Locked!</h2>
             <p class="text-gray-500 text-sm mb-8">You must join our official channel to use this app.</p>
@@ -255,14 +309,14 @@
     <div id="menu-overlay"></div>
     <aside id="slide-out-menu">
         <div class="menu-header bg-gray-50 p-6 border-b border-gray-100">
-            <h2 class="text-xl font-bold text-gray-800">Support Center</h2>
+            <h2 class="text-xl font-bold text-gray-800 font-orbitron">Support Center</h2>
             <p class="text-xs text-gray-500 mt-1">Links close automatically in 8s</p>
         </div>
         <nav id="support-channels-list" class="flex-grow overflow-y-auto p-4 bg-gray-50/50">
             <!-- Populated via JS -->
         </nav>
         <div class="p-4 text-center text-[10px] text-gray-400 border-t bg-white">
-            BIGGER SERVER &copy; 2025
+            EARN FIRE &copy; 2025
         </div>
     </aside>
 
@@ -271,23 +325,23 @@
         <header class="header flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="relative cursor-pointer" onclick="navigateTo('profile-page')">
-                    <img id="header-profile-pic" class="w-10 h-10 rounded-full border-2 border-indigo-100 object-cover hidden" src="" alt="Profile">
-                    <div id="header-initials-avatar" class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md"><span id="header-initials" class="text-sm font-bold text-white"></span></div>
+                    <img id="header-profile-pic" class="w-10 h-10 rounded-full border-2 border-yellow-500 object-cover hidden" src="" alt="Profile">
+                    <div id="header-initials-avatar" class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-800 to-black flex items-center justify-center shadow-md border border-yellow-500"><span id="header-initials" class="text-sm font-bold text-yellow-500"></span></div>
                 </div>
                 <div>
-                    <h1 id="header-welcome-name" class="text-sm font-bold text-gray-800 leading-tight">Welcome!</h1>
-                    <div class="flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                        <p class="text-xs text-gray-500 font-medium">Online</p>
+                    <h1 class="text-lg font-black text-premium leading-none">EARN FIRE</h1>
+                    <div class="flex items-center gap-1 mt-0.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                        <p id="header-welcome-name" class="text-[10px] text-gray-500 font-medium">Welcome User</p>
                     </div>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
-                <button id="notification-btn" class="relative p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+                <button id="notification-btn" class="relative p-2 rounded-full bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-100">
                     <i data-lucide="bell" class="w-5 h-5 text-gray-700"></i>
                     <span id="notification-badge" class="notification-badge hidden">0</span>
                 </button>
-                <button id="hamburger-menu-btn" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+                <button id="hamburger-menu-btn" class="p-2 rounded-full bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-100">
                     <i data-lucide="menu" class="w-5 h-5 text-gray-700"></i>
                 </button>
             </div>
@@ -305,39 +359,39 @@
                     <div class="dots" id="dots"></div>
                 </div>
 
-                <div class="credit-card-bg p-6 flex flex-col justify-between h-48 w-full shadow-2xl">
+                <div class="credit-card-bg p-6 flex flex-col justify-between h-48 w-full">
                     <div class="flex justify-between items-start">
                         <div class="chip"></div>
-                        <span class="text-xs font-mono opacity-70 tracking-widest">BIGGER SERVER</span>
+                        <span class="text-[10px] font-mono opacity-80 tracking-[0.2em] text-yellow-500 font-bold">PREMIUM MEMBER</span>
                     </div>
-                    <div>
-                        <p class="text-xs text-gray-300 font-medium mb-1 uppercase tracking-wider">Total Balance</p>
-                        <h2 id="balance-display" class="text-3xl font-mono font-bold tracking-tight">৳0.00</h2>
+                    <div class="relative z-10">
+                        <p class="text-[10px] text-gray-400 font-medium mb-1 uppercase tracking-wider">Total Balance</p>
+                        <h2 id="balance-display" class="text-3xl font-mono font-bold tracking-tight text-white drop-shadow-md">৳0.00</h2>
                     </div>
-                    <div class="flex justify-between items-center mt-2">
-                         <p class="text-xs font-mono opacity-80">**** **** **** USER</p>
-                         <button id="home-deposit-btn" class="bg-white text-indigo-900 px-4 py-1.5 rounded-full text-xs font-bold shadow-lg active:scale-95 transition-transform flex items-center gap-1">
-                             <i data-lucide="plus-circle" class="w-3 h-3"></i> Add Money
+                    <div class="flex justify-between items-center mt-2 relative z-10">
+                         <p class="text-[10px] font-mono opacity-60">**** **** **** USER</p>
+                         <button id="home-deposit-btn" class="bg-gradient-to-r from-yellow-500 to-amber-600 text-black px-4 py-1.5 rounded-full text-[10px] font-bold shadow-[0_0_15px_rgba(255,215,0,0.3)] active:scale-95 transition-transform flex items-center gap-1">
+                             <i data-lucide="plus-circle" class="w-3 h-3"></i> ADD FUND
                          </button>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-4 gap-3">
                     <button class="action-btn" onclick="navigateTo('pay-page')">
-                        <div class="p-2 bg-blue-50 rounded-full"><i data-lucide="wallet" class="w-5 h-5 text-blue-600"></i></div>
-                        <span>Deposit</span>
+                        <div class="p-3 bg-blue-50 rounded-full"><i data-lucide="wallet" class="w-5 h-5 text-blue-600"></i></div>
+                        <span class="text-xs font-semibold text-gray-600">Deposit</span>
                     </button>
                     <button class="action-btn" onclick="navigateTo('mail-page')">
-                        <div class="p-2 bg-purple-50 rounded-full"><i data-lucide="shopping-cart" class="w-5 h-5 text-purple-600"></i></div>
-                        <span>Buy</span>
+                        <div class="p-3 bg-purple-50 rounded-full"><i data-lucide="shopping-cart" class="w-5 h-5 text-purple-600"></i></div>
+                        <span class="text-xs font-semibold text-gray-600">Shop</span>
                     </button>
                     <button class="action-btn" onclick="navigateTo('offer-page')">
-                        <div class="p-2 bg-pink-50 rounded-full"><i data-lucide="gift" class="w-5 h-5 text-pink-600"></i></div>
-                        <span>Offer</span>
+                        <div class="p-3 bg-pink-50 rounded-full"><i data-lucide="gift" class="w-5 h-5 text-pink-600"></i></div>
+                        <span class="text-xs font-semibold text-gray-600">Earn</span>
                     </button>
                     <button class="action-btn" onclick="toggleMenu()">
-                        <div class="p-2 bg-green-50 rounded-full"><i data-lucide="headphones" class="w-5 h-5 text-green-600"></i></div>
-                        <span>Support</span>
+                        <div class="p-3 bg-green-50 rounded-full"><i data-lucide="headphones" class="w-5 h-5 text-green-600"></i></div>
+                        <span class="text-xs font-semibold text-gray-600">Help</span>
                     </button>
                 </div>
             </div>
@@ -362,7 +416,6 @@
                     </div>
                 </div>
 
-                <!-- REAL TELEGRAM API TASKS SECTION -->
                 <div id="offer-content-tasks" class="offer-content-section" style="display:none;">
                      <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-3 text-center">
                          <p class="text-xs text-blue-700 font-semibold">Join channels and earn money. Verified by API.</p>
@@ -384,37 +437,37 @@
 
             <!-- =========== DEPOSIT PAGE =========== -->
             <div id="pay-page" class="space-y-6 sub-page">
-                <h2 class="text-2xl font-bold text-center text-accent-gradient pt-2">Deposit Center</h2>
-                <div class="card-bg p-5 space-y-5 bg-gradient-to-br from-blue-50/50 to-white">
+                <h2 class="text-2xl font-bold text-center text-premium pt-2">Deposit Center</h2>
+                <div class="card-bg p-5 space-y-5">
                     <div class="text-center">
-                        <h3 class="font-semibold text-lg flex items-center justify-center gap-2 text-gray-800"><i data-lucide="credit-card" class="w-5 h-5 text-blue-500"></i><span>টাকা জমা দিন</span></h3>
-                        <p class="text-xs text-gray-500 mt-1">পছন্দমত মাধ্যমে টাকা পাঠান</p>
+                        <h3 class="font-semibold text-lg flex items-center justify-center gap-2 text-gray-800"><i data-lucide="credit-card" class="w-5 h-5 text-yellow-600"></i><span>টাকা জমা দিন</span></h3>
+                        <p class="text-xs text-gray-500 mt-1">Select your preferred method</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3 pt-2">
-                        <div class="bg-white p-3 rounded-xl text-center border hover:border-blue-400 shadow-sm transition-all">
+                        <div class="bg-white p-3 rounded-xl text-center border hover:border-yellow-400 shadow-sm transition-all">
                             <img src="https://i.postimg.cc/Jh9s6jWw/20250922-113350.png" alt="Nagad" class="w-8 h-8 rounded-full mx-auto mb-2">
                             <p class="font-bold text-sm">নগদ</p>
                             <p class="text-gray-600 font-mono text-xs my-1">01864260513</p>
-                            <button onclick="copyToClipboard('01864260513', this)" class="w-full text-[10px] py-1 bg-gray-100 rounded hover:bg-gray-200 font-bold uppercase tracking-wide">Copy</button>
+                            <button onclick="copyToClipboard('01864260513', this)" class="w-full text-[10px] py-1 bg-gray-50 rounded hover:bg-gray-100 font-bold uppercase tracking-wide border">Copy</button>
                         </div>
-                        <div class="bg-white p-3 rounded-xl text-center border hover:border-blue-400 shadow-sm transition-all">
+                        <div class="bg-white p-3 rounded-xl text-center border hover:border-pink-400 shadow-sm transition-all">
                             <img src="https://i.postimg.cc/tCwGVkdH/20250922-113514.png" alt="bKash" class="w-8 h-8 rounded-full mx-auto mb-2">
                             <p class="font-bold text-sm">বিকাশ</p>
                             <p class="text-gray-600 font-mono text-xs my-1">01827750260</p>
-                            <button onclick="copyToClipboard('01827750260', this)" class="w-full text-[10px] py-1 bg-gray-100 rounded hover:bg-gray-200 font-bold uppercase tracking-wide">Copy</button>
+                            <button onclick="copyToClipboard('01827750260', this)" class="w-full text-[10px] py-1 bg-gray-50 rounded hover:bg-gray-100 font-bold uppercase tracking-wide border">Copy</button>
                         </div>
-                         <div class="bg-white p-3 rounded-xl text-center border hover:border-blue-400 shadow-sm transition-all">
+                         <div class="bg-white p-3 rounded-xl text-center border hover:border-purple-400 shadow-sm transition-all">
                             <img src="https://i.postimg.cc/htsw10Tj/20250922-113924.png" alt="Rocket" class="w-8 h-8 rounded-full mx-auto mb-2">
                             <p class="font-bold text-sm">রকেট</p>
                             <p class="text-gray-600 font-mono text-xs my-1">018277502604</p>
-                            <button onclick="copyToClipboard('018277502604', this)" class="w-full text-[10px] py-1 bg-gray-100 rounded hover:bg-gray-200 font-bold uppercase tracking-wide">Copy</button>
+                            <button onclick="copyToClipboard('018277502604', this)" class="w-full text-[10px] py-1 bg-gray-50 rounded hover:bg-gray-100 font-bold uppercase tracking-wide border">Copy</button>
                         </div>
-                         <div class="bg-white p-3 rounded-xl text-center border hover:border-blue-400 shadow-sm transition-all">
+                         <div class="bg-white p-3 rounded-xl text-center border hover:border-yellow-500 shadow-sm transition-all">
                             <img src="https://i.postimg.cc/L6LFLfxY/20250922-113752.png" alt="Binance" class="w-8 h-8 rounded-full mx-auto mb-2">
                             <p class="font-bold text-sm">Binance</p>
                             <p class="text-gray-600 font-mono text-xs my-1">1105989483</p>
-                            <button onclick="copyToClipboard('1105989483', this)" class="w-full text-[10px] py-1 bg-gray-100 rounded hover:bg-gray-200 font-bold uppercase tracking-wide">Copy ID</button>
+                            <button onclick="copyToClipboard('1105989483', this)" class="w-full text-[10px] py-1 bg-gray-50 rounded hover:bg-gray-100 font-bold uppercase tracking-wide border">Copy ID</button>
                         </div>
                     </div>
 
@@ -484,8 +537,8 @@
             <div id="profile-page" class="space-y-6 sub-page">
                 <div class="card-bg p-6 flex flex-col items-center text-center mt-4">
                     <div class="relative mb-4">
-                        <img id="profile-pic" class="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover" src="" alt="Profile">
-                        <div id="profile-initials-avatar" class="w-24 h-24 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 flex items-center justify-center border-4 border-white shadow-lg hidden"><span id="profile-initials" class="text-3xl font-bold text-white"></span></div>
+                        <img id="profile-pic" class="w-24 h-24 rounded-full border-4 border-yellow-500 shadow-xl object-cover" src="" alt="Profile">
+                        <div id="profile-initials-avatar" class="w-24 h-24 rounded-full bg-gradient-to-tr from-gray-800 to-black flex items-center justify-center border-4 border-yellow-500 shadow-xl hidden"><span id="profile-initials" class="text-3xl font-bold text-yellow-500"></span></div>
                     </div>
                     <h3 id="profile-name" class="text-2xl font-bold text-gray-800">Loading...</h3>
                     <p id="profile-username" class="text-gray-500 text-sm font-medium">@username</p>
@@ -563,18 +616,18 @@
                     <button id="add-mails-btn" class="w-full p-3 rounded-xl btn-gradient">Add to Stock</button>
                 </div>
 
-                <!-- Admin Task Adder (Updated) -->
+                <!-- Admin Task Adder -->
                 <div class="card-bg p-5 space-y-4 mt-4">
                     <h3 class="font-bold text-gray-800">Add New Task</h3>
                     <select id="task-type" class="w-full p-3 rounded-xl input-field text-sm">
                         <option value="link">Web Link</option>
                         <option value="telegram">Telegram Channel (API Check)</option>
                     </select>
-                    <input id="task-title" type="text" placeholder="Task Title (e.g. Join Channel)" class="w-full p-3 rounded-xl input-field text-sm">
+                    <input id="task-title" type="text" placeholder="Task Title" class="w-full p-3 rounded-xl input-field text-sm">
                     <input id="task-reward" type="text" placeholder="Reward Text (e.g. 5 Taka)" class="w-full p-3 rounded-xl input-field text-sm">
-                    <input id="task-amount" type="number" placeholder="Reward Amount (Number)" class="w-full p-3 rounded-xl input-field text-sm">
+                    <input id="task-amount" type="number" placeholder="Reward Amount" class="w-full p-3 rounded-xl input-field text-sm">
                     <input id="task-link" type="text" placeholder="Link URL" class="w-full p-3 rounded-xl input-field text-sm">
-                    <input id="task-target-id" type="text" placeholder="Channel Username (@earn_fire) if Telegram" class="w-full p-3 rounded-xl input-field text-sm">
+                    <input id="task-target-id" type="text" placeholder="@username (Telegram Only)" class="w-full p-3 rounded-xl input-field text-sm">
                     <button id="add-task-btn" class="w-full p-3 rounded-xl btn-gradient">Add Task</button>
                 </div>
 
@@ -655,7 +708,7 @@
     <!-- Modals -->
     <div id="custom-alert" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[80] p-4 backdrop-blur-sm">
         <div class="bg-white rounded-2xl p-6 w-full max-w-xs text-center border shadow-2xl">
-            <div class="mb-4 mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center"><i data-lucide="info" class="w-6 h-6 text-blue-600"></i></div>
+            <div class="mb-4 mx-auto w-12 h-12 bg-yellow-50 rounded-full flex items-center justify-center"><i data-lucide="info" class="w-6 h-6 text-yellow-600"></i></div>
             <p id="alert-message" class="mb-6 font-medium text-gray-800"></p>
             <button id="alert-ok-btn" class="w-full py-2.5 rounded-xl btn-gradient">OK</button>
         </div>
@@ -676,7 +729,7 @@
 
     <div id="mail-details-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[80] p-4 backdrop-blur-sm">
         <div class="card-bg rounded-2xl p-6 w-full max-w-md relative flex flex-col max-h-[80vh]">
-            <h3 id="mail-details-title" class="text-xl font-bold text-center text-accent-gradient mb-4 shrink-0">Details</h3>
+            <h3 id="mail-details-title" class="text-xl font-bold text-center text-premium mb-4 shrink-0">Details</h3>
             <div id="mail-details-content" class="text-gray-700 bg-gray-50 p-4 rounded-xl text-sm leading-relaxed overflow-y-auto"></div>
             <button id="mail-details-ok-btn" class="w-full p-3 rounded-xl btn-gradient mt-4 shrink-0">Close</button>
         </div>
@@ -759,7 +812,7 @@
 
         const loader = document.getElementById('loader');
 
-        const getLoadingHTML = () => `<div class="flex justify-center py-8"><div class="loader-spinner !w-8 !h-8 !border-2"></div></div>`;
+        const getLoadingHTML = () => `<div class="flex justify-center py-8"><div class="loader-spinner border-t-yellow-500 border-gray-200"></div></div>`;
 
         window.onload = async () => {
             cycleReviewsOnLoader();
@@ -793,14 +846,14 @@
             loader.style.opacity = '0';
             setTimeout(() => {
                 loader.style.display = 'none';
-            }, 500);
+            }, 600);
         };
 
         function cycleReviewsOnLoader() {
             const reviews = [
-                '"Best server ever!" - Rayhan',
-                '"Instant delivery, loved it." - Faria',
-                '"BIGGER SERVER is trusted." - Sumon'
+                '"Best trusted server!" - Rayhan',
+                '"Instant payment & delivery." - Faria',
+                '"Earn Fire is the best." - Sumon'
             ];
             let reviewIndex = 0;
             const reviewEl = document.getElementById('loader-reviews');
@@ -906,7 +959,6 @@
                     return ["creator", "administrator", "member", "restricted"].includes(status);
                 } else {
                     console.error("API Error:", data.description);
-                    // Return false if user is left/kicked
                     return false; 
                 }
             } catch (error) {
@@ -924,7 +976,7 @@
 
             if (now - lastMsgTime > oneDay) {
                 try {
-                    const message = "👋 Welcome back to BIGGER SERVER! Check out our new stocks today.";
+                    const message = "👋 Welcome back to Earn Fire! Check out our new stocks today.";
                     const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${userId}&text=${encodeURIComponent(message)}`;
                     
                     fetch(url).catch(e => console.log("Auto msg err", e));
@@ -974,7 +1026,6 @@
             }
 
             const menu = document.getElementById('slide-out-menu');
-            const overlay = document.getElementById('menu-overlay');
             if(menu.classList.contains('open')) toggleMenu();
 
             document.querySelectorAll('.sub-page').forEach(p => p.classList.remove('active'));
@@ -1017,7 +1068,7 @@
             } else {
                 overlay.style.opacity = '0';
                 overlay.style.visibility = 'hidden';
-                menu.style.transform = 'translateX(100%)'; /* Changed to 100% for right side */
+                menu.style.transform = 'translateX(100%)';
             }
         }
         
@@ -1085,12 +1136,10 @@
             }
         }
 
-        // ============ TASK SYSTEM (WITH API VERIFICATION) ============
         async function loadTasks() {
             const container = document.getElementById('task-list-container');
             container.innerHTML = getLoadingHTML();
             try {
-                // Get Completed Tasks for this user to hide them
                 const historyQ = query(collection(db, "task_history"), where("userId", "==", userData.tgChatId));
                 const historySnap = await getDocs(historyQ);
                 const completedTaskIds = new Set(historySnap.docs.map(d => d.data().taskId));
@@ -1134,9 +1183,7 @@
 
         window.handleTelegramTask = (taskId, link, channelUsername, reward) => {
             const area = document.getElementById(`action-area-${taskId}`);
-            // Open Link
             window.Telegram.WebApp.openLink(link);
-            // Change button to Verify
             area.innerHTML = `<button onclick="verifyTelegramJoin('${taskId}', '${channelUsername}', ${reward})" class="px-3 py-1 bg-green-500 text-white text-xs rounded-lg font-bold animate-pulse">Verify</button>`;
         }
 
@@ -1160,7 +1207,6 @@
 
         window.handleWebTask = (taskId, link, reward) => {
             window.Telegram.WebApp.openLink(link);
-            // Simulate 8s timer logic for web tasks too if needed, or instant claim
             const area = document.getElementById(`action-area-${taskId}`);
             area.innerHTML = `<span class="text-xs text-gray-400">Wait 8s...</span>`;
             setTimeout(() => {
@@ -1186,7 +1232,7 @@
             const reward = document.getElementById('task-reward').value;
             const amount = parseFloat(document.getElementById('task-amount').value);
             const link = document.getElementById('task-link').value;
-            const targetId = document.getElementById('task-target-id').value; // For Telegram Username
+            const targetId = document.getElementById('task-target-id').value; 
 
             if(!title || !reward || !amount || !link) return showAlert("Fill all fields");
             if(type === 'telegram' && !targetId) return showAlert("Channel Username required for API check");
@@ -1201,14 +1247,10 @@
             } catch(e) { showAlert("Error adding task"); }
             finally { loader.style.display = 'none'; }
         }
-        // =============================================================
 
         window.switchMailView = (view) => {
-            // Update buttons
             document.querySelectorAll('.mail-view-switcher button').forEach(b => b.classList.remove('active'));
             document.getElementById(`${view}-mail-btn`).classList.add('active');
-
-            // Update containers
             document.querySelectorAll('#mail-views-container > div').forEach(d => d.style.display = 'none');
             document.getElementById(`${view}-mail-container`).style.display = 'block';
         }
@@ -1349,7 +1391,7 @@
                 const encodedDetails = encodeURIComponent(mail.details || '');
                 const encodedFeatures = encodeURIComponent(JSON.stringify(mail.featureList || []));
 
-                return `<div class="card-bg p-4 rounded-xl space-y-3"><div class="flex justify-between items-center"><div class="flex items-center gap-3"><img src="${mail.logoUrl}" class="w-8 h-8 rounded-lg object-cover" alt="${mail.type} logo"><h3 class="font-bold text-lg text-gray-800">${mail.type}</h3></div><div class="flex items-center gap-2">${validityTagHtml}<button onclick="showMailDetails('${mail.type}', '${encodedDetails}', '${encodedFeatures}')" class="text-blue-600 text-sm font-semibold">Details</button></div></div><div class="grid grid-cols-3 text-center items-center pt-2 border-t border-gray-200"><div class="py-2">${apiButtonHtml}</div><div class="py-2"><p class="text-gray-500 text-sm">Price</p><p class="font-bold text-lg text-blue-600">৳${parseFloat(mail.priceBdt).toFixed(2)}</p></div><div class="py-2"><p class="text-gray-500 text-sm">Stock</p><p class="font-bold text-lg text-green-600">${mail.stock}</p></div></div><button class="${buyButtonClasses} w-full py-2 rounded-lg text-md" ${buyButtonDisabled ? 'disabled' : ''} onclick="buyMail('${mail.type}', ${mail.priceBdt}, '${mail.stockKey}')">Buy Now</button></div>`;
+                return `<div class="card-bg p-4 rounded-xl space-y-3"><div class="flex justify-between items-center"><div class="flex items-center gap-3"><img src="${mail.logoUrl}" class="w-8 h-8 rounded-lg object-cover" alt="${mail.type} logo"><h3 class="font-bold text-lg text-gray-800">${mail.type}</h3></div><div class="flex items-center gap-2">${validityTagHtml}<button onclick="showMailDetails('${mail.type}', '${encodedDetails}', '${encodedFeatures}')" class="text-blue-600 text-sm font-semibold">Details</button></div></div><div class="grid grid-cols-3 text-center items-center pt-2 border-t border-gray-100"><div class="py-2">${apiButtonHtml}</div><div class="py-2"><p class="text-gray-500 text-sm">Price</p><p class="font-bold text-lg text-blue-600">৳${parseFloat(mail.priceBdt).toFixed(2)}</p></div><div class="py-2"><p class="text-gray-500 text-sm">Stock</p><p class="font-bold text-lg text-green-600">${mail.stock}</p></div></div><button class="${buyButtonClasses} w-full py-2 rounded-lg text-md" ${buyButtonDisabled ? 'disabled' : ''} onclick="buyMail('${mail.type}', ${mail.priceBdt}, '${mail.stockKey}')">Buy Now</button></div>`;
             }).join('');
             lucide.createIcons();
         }
@@ -1386,10 +1428,8 @@
                     renderMailList(numberMails, numberMailContainer, effectiveBalance)
                 ]);
                 
-                // Re-apply active view logic
                 const activeBtn = document.querySelector('.mail-view-switcher button.active');
                 if(activeBtn) {
-                     // Get the ID (e.g., login-mail-btn) -> split -> get 'login' -> switchMailView
                      const view = activeBtn.id.split('-')[0]; 
                      switchMailView(view);
                 } else {
@@ -1444,7 +1484,7 @@
                 const ws = XLSX.utils.json_to_sheet(dataForExcel);
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "History");
-                XLSX.writeFile(wb, "BIGGER_SERVER_History.xlsx");
+                XLSX.writeFile(wb, "EARN_FIRE_History.xlsx");
             } catch (error) { showAlert("Error downloading."); }
             finally { loader.style.display = 'none'; }
         }
@@ -1465,6 +1505,7 @@
             finally { loader.style.display = 'none'; }
         }
 
+        // ============ FIXED TRANSACTION LOGIC ============
         window.buyMail = async function(mailType, costParam, stockKey) {
             const cost = parseFloat(costParam);
             if (!confirm(`Confirm purchase of ${mailType} for ৳${cost.toFixed(2)}?`)) return;
@@ -1472,35 +1513,47 @@
             loader.style.display = 'flex';
             
             try {
+                // Step 1: Find a candidate mail OUTSIDE transaction (To avoid complex query errors in Tx)
+                const q = query(collection(db, stockKey), where("isSold", "==", false), limit(1));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) throw "Out of Stock";
+                const candidateMailDoc = snapshot.docs[0];
+
                 await runTransaction(db, async (transaction) => {
                     const buyerRef = doc(db, "users", userData.tgChatId);
+                    const counterRef = doc(db, "counters", "mail_purchase");
+                    const mailRef = candidateMailDoc.ref; // Use the specific ref found earlier
+                    
+                    // ALL READS MUST BE HERE (Top of transaction block)
                     const buyerSnap = await transaction.get(buyerRef);
-                    if (!buyerSnap.exists()) throw "User Error";
-                    let currentBuyerData = buyerSnap.data();
+                    const counterSnap = await transaction.get(counterRef);
+                    const mailSnap = await transaction.get(mailRef); // Check again if it's still unsold
 
+                    if (!buyerSnap.exists()) throw "User Error";
+                    if (!mailSnap.exists() || mailSnap.data().isSold) throw "Race Condition"; // Someone else bought it ms ago
+
+                    let currentBuyerData = buyerSnap.data();
                     let teamLeaderRef = null;
                     let currentLeaderData = null;
+
+                    // Read Team Leader if needed (Must be done before writes too)
                     if (currentBuyerData.linkedBy) {
                         teamLeaderRef = doc(db, "users", currentBuyerData.linkedBy);
                         const leaderSnap = await transaction.get(teamLeaderRef);
                         if (leaderSnap.exists()) currentLeaderData = leaderSnap.data();
                     }
-                    
+
+                    // --- LOGIC STARTS HERE ---
                     const effectiveBalance = currentBuyerData.balance + (currentLeaderData ? currentLeaderData.balance : 0);
                     if (effectiveBalance < cost) throw "Insufficient Balance";
 
-                    const mailQuery = query(collection(db, stockKey), where("isSold", "==", false), limit(1));
-                    const mailQuerySnapshot = await getDocs(mailQuery);
-                    if (mailQuerySnapshot.empty) throw "Out of Stock";
-                    
-                    const mailDoc = mailQuerySnapshot.docs[0];
-                    const mailRef = mailDoc.ref;
-                    const mailData = mailDoc.data();
-
+                    const mailData = mailSnap.data();
                     let costRemaining = cost;
                     let paidBy = 'self';
                     let buyerDeduction = Math.min(costRemaining, currentBuyerData.balance);
                     
+                    // --- WRITES START HERE ---
                     if (buyerDeduction > 0) {
                         transaction.update(buyerRef, { balance: currentBuyerData.balance - buyerDeduction });
                         costRemaining -= buyerDeduction;
@@ -1514,8 +1567,6 @@
 
                     transaction.update(mailRef, { isSold: true, soldTo: userData.tgChatId, soldAt: serverTimestamp() });
                     
-                    const counterRef = doc(db, "counters", "mail_purchase");
-                    const counterSnap = await transaction.get(counterRef);
                     const saleId = counterSnap.exists() ? counterSnap.data().currentId + 1 : 1;
                     transaction.set(counterRef, { currentId: saleId }, { merge: true });
 
@@ -1531,6 +1582,8 @@
                     });
                     
                     userData.balance = currentBuyerData.balance - buyerDeduction;
+                    
+                    // Update UI immediately for success modal
                     document.getElementById('purchase-success-email').textContent = mailData.email;
                     document.getElementById('purchase-success-password').textContent = mailData.password || 'N/A';
                 });
@@ -1541,16 +1594,18 @@
             } catch (e) { 
                 if (e === "Insufficient Balance") {
                     document.getElementById('insufficient-balance-modal').classList.remove('hidden');
-                } else if (e === "Out of Stock") {
-                    showAlert("Sorry, this item is just out of stock.");
+                } else if (e === "Out of Stock" || e === "Race Condition") {
+                    showAlert("Sorry, this item was just sold or is out of stock. Please try again.");
                     loadMailStore();
                 } else {
-                    showAlert("Transaction failed: " + e);
+                    console.error(e);
+                    showAlert("Transaction failed. Try again.");
                 }
             } finally { 
                 loader.style.display = 'none';
             }
         }
+        // ===============================================
 
         window.showMailDetails = function(mailType, encodedDetails, encodedFeatures) {
             const details = decodeURIComponent(encodedDetails);
@@ -1816,16 +1871,13 @@
                 { name: "Telegram Channel", iconColor: "bg-blue-100 text-blue-600", icon: "send", link: "https://t.me/your_channel_link" },
                 { name: "WhatsApp Support", iconColor: "bg-green-100 text-green-600", icon: "message-circle", link: "https://wa.me/your_number" },
                 { name: "Online Chat", iconColor: "bg-orange-100 text-orange-600", icon: "message-square", link: "https://t.me/your_support_user" },
-                { name: "Email Support", iconColor: "bg-gray-100 text-gray-600", icon: "mail", link: "mailto:support@biggerserver.com" }
+                { name: "Email Support", iconColor: "bg-gray-100 text-gray-600", icon: "mail", link: "mailto:support@earnfire.com" }
             ];
             list.innerHTML = channels.map(c => `<a href="${c.link}" target="_blank" onclick="handleMenuLinkClick(event)" class="support-item group"><div class="flex items-center"><div class="support-icon ${c.iconColor}"><i data-lucide="${c.icon}" class="w-6 h-6"></i></div><span class="font-bold text-sm text-gray-700">${c.name}</span></div><i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 group-hover:text-indigo-500 transition-colors"></i></a>`).join('');
             lucide.createIcons();
         }
         
-        // 8 Seconds Auto Close Logic for Side Menu
         window.handleMenuLinkClick = (e) => {
-            // Allow link to open naturally
-            // Then close menu after 8s
             setTimeout(() => {
                 const menu = document.getElementById('slide-out-menu');
                 if(menu.classList.contains('open')) toggleMenu();
@@ -1905,4 +1957,4 @@
 
     </script>
 </body>
-</html>
+                            </html>
