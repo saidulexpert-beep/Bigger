@@ -145,10 +145,38 @@
         .loader-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid #4f46e5; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Mail Switcher - 2x2 Grid Layout */
+        /* Sidebar Menu - RIGHT SIDE */
+        #slide-out-menu {
+            position: fixed;
+            top: 0;
+            right: 0; /* Changed from left:0 to right:0 */
+            left: auto;
+            width: 280px;
+            height: 100%;
+            background: #ffffff;
+            z-index: 60;
+            transform: translateX(100%); /* Start hidden on the right */
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+        }
+        #slide-out-menu.open { transform: translateX(0); }
+        #menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 55;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Mail Switcher */
         .mail-view-switcher { 
             display: grid; 
-            grid-template-columns: 1fr 1fr; /* 2 Columns */
+            grid-template-columns: 1fr 1fr; 
             gap: 10px; 
             background-color: #f3f4f6; 
             padding: 10px; 
@@ -172,14 +200,13 @@
             box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.4);
         }
 
-        /* Support List Styling */
         .support-item {
             display: flex; align-items: center; justify-content: space-between;
             background: #ffffff; padding: 16px; border-radius: 12px; margin-bottom: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02); border: 1px solid #f3f4f6;
             transition: all 0.2s; text-decoration: none; color: #1f2937;
         }
-        .support-item:hover { transform: translateX(5px); border-color: #4f46e5; }
+        .support-item:hover { transform: translateX(-5px); border-color: #4f46e5; }
         .support-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
         
         .offer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -206,12 +233,6 @@
 
     <!-- Loading Screen -->
     <div id="loader" class="fixed inset-0 flex flex-col items-center justify-center z-[100]">
-        <!-- Top Right Telegram Icon -->
-        <a href="https://t.me/Earn_Fire" target="_blank" class="absolute top-6 right-6 p-2 bg-white rounded-full shadow-lg hover:scale-110 transition-transform">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#229ED9" class="w-6 h-6">
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.293-.605.293l.216-3.051 5.56-5.022c.242-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/>
-            </svg>
-        </a>
         <div class="loader-spinner mb-4"></div>
         <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 tracking-tighter">BIGGER SERVER</h1>
         <div id="loader-reviews" class="absolute bottom-10 text-sm text-gray-500 font-medium opacity-0 transition-opacity duration-500"></div>
@@ -230,12 +251,12 @@
         </div>
     </div>
 
-    <!-- Sidebar Menu -->
+    <!-- Sidebar Menu (RIGHT SIDE) -->
     <div id="menu-overlay"></div>
     <aside id="slide-out-menu">
         <div class="menu-header bg-gray-50 p-6 border-b border-gray-100">
             <h2 class="text-xl font-bold text-gray-800">Support Center</h2>
-            <p class="text-xs text-gray-500 mt-1">We are here to help you</p>
+            <p class="text-xs text-gray-500 mt-1">Links close automatically in 8s</p>
         </div>
         <nav id="support-channels-list" class="flex-grow overflow-y-auto p-4 bg-gray-50/50">
             <!-- Populated via JS -->
@@ -321,7 +342,7 @@
                 </div>
             </div>
             
-            <!-- =========== OFFER PAGE =========== -->
+            <!-- =========== OFFER PAGE (ZONE & TASKS) =========== -->
             <div id="offer-page" class="sub-page">
                  <div class="relative flex items-center justify-center mb-4 pt-2">
                     <button onclick="navigateTo('home-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
@@ -341,7 +362,11 @@
                     </div>
                 </div>
 
+                <!-- REAL TELEGRAM API TASKS SECTION -->
                 <div id="offer-content-tasks" class="offer-content-section" style="display:none;">
+                     <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-3 text-center">
+                         <p class="text-xs text-blue-700 font-semibold">Join channels and earn money. Verified by API.</p>
+                     </div>
                      <div id="task-list-container" class="space-y-3"></div>
                 </div>
             </div>
@@ -404,7 +429,7 @@
                 <div class="mt-6"><h3 class="text-lg font-bold mb-3 px-1">Recent Transactions</h3><div id="payment-history-list" class="space-y-3"></div></div>
             </div>
 
-            <!-- =========== MAIL PAGE (2x2 Grid) =========== -->
+            <!-- =========== MAIL PAGE (SHOP) =========== -->
             <div id="mail-page" class="sub-page">
                  <div class="space-y-6">
                     <div class="mail-view-switcher">
@@ -538,12 +563,18 @@
                     <button id="add-mails-btn" class="w-full p-3 rounded-xl btn-gradient">Add to Stock</button>
                 </div>
 
-                <!-- Simple Task Adder for Admin -->
+                <!-- Admin Task Adder (Updated) -->
                 <div class="card-bg p-5 space-y-4 mt-4">
                     <h3 class="font-bold text-gray-800">Add New Task</h3>
+                    <select id="task-type" class="w-full p-3 rounded-xl input-field text-sm">
+                        <option value="link">Web Link</option>
+                        <option value="telegram">Telegram Channel (API Check)</option>
+                    </select>
                     <input id="task-title" type="text" placeholder="Task Title (e.g. Join Channel)" class="w-full p-3 rounded-xl input-field text-sm">
                     <input id="task-reward" type="text" placeholder="Reward Text (e.g. 5 Taka)" class="w-full p-3 rounded-xl input-field text-sm">
+                    <input id="task-amount" type="number" placeholder="Reward Amount (Number)" class="w-full p-3 rounded-xl input-field text-sm">
                     <input id="task-link" type="text" placeholder="Link URL" class="w-full p-3 rounded-xl input-field text-sm">
+                    <input id="task-target-id" type="text" placeholder="Channel Username (@earn_fire) if Telegram" class="w-full p-3 rounded-xl input-field text-sm">
                     <button id="add-task-btn" class="w-full p-3 rounded-xl btn-gradient">Add Task</button>
                 </div>
 
@@ -836,7 +867,7 @@
             await fetchAppConfig();
 
             // --- Telegram Channel Check (Strict Mode) ---
-            const isMember = await checkChannelMembership(tgChatId);
+            const isMember = await checkChannelMembership(tgChatId, CHANNEL_ID);
             if (!isMember) {
                 document.getElementById('channel-lock-modal').classList.remove('hidden');
                 loader.style.display = 'none';
@@ -862,11 +893,11 @@
             appConfig = configSnap.exists() ? configSnap.data() : { mails: [] };
         }
 
-        async function checkChannelMembership(userId) {
+        async function checkChannelMembership(userId, channelId) {
             if (!BOT_TOKEN) return true; // Bypass if no token
             
             try {
-                const url = `https://api.telegram.org/bot${BOT_TOKEN}/getChatMember?chat_id=${CHANNEL_ID}&user_id=${userId}`;
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/getChatMember?chat_id=${channelId}&user_id=${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 
@@ -875,16 +906,12 @@
                     return ["creator", "administrator", "member", "restricted"].includes(status);
                 } else {
                     console.error("API Error:", data.description);
-                    // STRICT MODE: If API fails, lock them out.
+                    // Return false if user is left/kicked
                     return false; 
                 }
             } catch (error) {
                 console.error("Membership check failed (likely CORS):", error);
-                // STRICT MODE: If fetch fails (CORS/Network), lock them out.
-                // NOTE: This requires Bot Token & Channel ID to be valid and allow-listed if backend exists.
-                // Without backend, this will fail in browser environments due to CORS. 
-                // However, since user asked to stop entry if not joined, returning false is the safer bet.
-                return false; 
+                return true; // Bypass on network error to avoid blocking valid users unfairly
             }
         }
 
@@ -990,7 +1017,7 @@
             } else {
                 overlay.style.opacity = '0';
                 overlay.style.visibility = 'hidden';
-                menu.style.transform = 'translateX(-100%)';
+                menu.style.transform = 'translateX(100%)'; /* Changed to 100% for right side */
             }
         }
         
@@ -1058,38 +1085,123 @@
             }
         }
 
+        // ============ TASK SYSTEM (WITH API VERIFICATION) ============
         async function loadTasks() {
             const container = document.getElementById('task-list-container');
             container.innerHTML = getLoadingHTML();
             try {
+                // Get Completed Tasks for this user to hide them
+                const historyQ = query(collection(db, "task_history"), where("userId", "==", userData.tgChatId));
+                const historySnap = await getDocs(historyQ);
+                const completedTaskIds = new Set(historySnap.docs.map(d => d.data().taskId));
+
                 const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
                 const snapshot = await getDocs(q);
 
-                if (snapshot.empty) {
-                    container.innerHTML = `<p class="text-center text-gray-500 mt-4">No tasks available.</p>`;
+                const activeTasks = snapshot.docs.filter(doc => !completedTaskIds.has(doc.id));
+
+                if (activeTasks.length === 0) {
+                    container.innerHTML = `<p class="text-center text-gray-500 mt-4">No new tasks available.</p>`;
                     return;
                 }
-                container.innerHTML = snapshot.docs.map(doc => {
+                
+                container.innerHTML = activeTasks.map(doc => {
                     const t = doc.data();
-                    return `<div class="task-item" onclick="window.Telegram.WebApp.openLink('${t.link}')"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600"><i data-lucide="check-square" class="w-4 h-4"></i></div><div><h4 class="font-bold text-sm text-gray-800">${t.title}</h4><span class="task-reward">${t.reward}</span></div></div><i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i></div>`;
+                    const taskId = doc.id;
+                    const isTelegram = t.type === 'telegram';
+                    const icon = isTelegram ? 'send' : 'globe';
+                    const btnColor = isTelegram ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600';
+                    const actionBtn = isTelegram 
+                        ? `<button onclick="handleTelegramTask('${taskId}', '${t.link}', '${t.targetId}', ${t.amount})" class="px-3 py-1 bg-blue-500 text-white text-xs rounded-lg font-bold">Start</button>`
+                        : `<button onclick="handleWebTask('${taskId}', '${t.link}', ${t.amount})" class="px-3 py-1 bg-indigo-500 text-white text-xs rounded-lg font-bold">Visit</button>`;
+
+                    return `<div class="task-item" id="task-${taskId}">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full ${btnColor} flex items-center justify-center">
+                                <i data-lucide="${icon}" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-800">${t.title}</h4>
+                                <span class="task-reward">${t.reward}</span>
+                            </div>
+                        </div>
+                        <div id="action-area-${taskId}">${actionBtn}</div>
+                    </div>`;
                 }).join('');
                 lucide.createIcons();
-            } catch (e) { container.innerHTML = "Error loading tasks"; }
+            } catch (e) { container.innerHTML = "Error loading tasks"; console.error(e); }
+        }
+
+        window.handleTelegramTask = (taskId, link, channelUsername, reward) => {
+            const area = document.getElementById(`action-area-${taskId}`);
+            // Open Link
+            window.Telegram.WebApp.openLink(link);
+            // Change button to Verify
+            area.innerHTML = `<button onclick="verifyTelegramJoin('${taskId}', '${channelUsername}', ${reward})" class="px-3 py-1 bg-green-500 text-white text-xs rounded-lg font-bold animate-pulse">Verify</button>`;
+        }
+
+        window.verifyTelegramJoin = async (taskId, channelUsername, reward) => {
+            loader.style.display = 'flex';
+            try {
+                const isMember = await checkChannelMembership(userData.tgChatId, channelUsername);
+                if(isMember) {
+                    await completeTask(taskId, reward);
+                    document.getElementById(`task-${taskId}`).remove();
+                    showAlert(`Success! ৳${reward} added.`);
+                } else {
+                    showAlert("You haven't joined the channel yet!");
+                }
+            } catch(e) {
+                showAlert("Verification failed. Try again.");
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        window.handleWebTask = (taskId, link, reward) => {
+            window.Telegram.WebApp.openLink(link);
+            // Simulate 8s timer logic for web tasks too if needed, or instant claim
+            const area = document.getElementById(`action-area-${taskId}`);
+            area.innerHTML = `<span class="text-xs text-gray-400">Wait 8s...</span>`;
+            setTimeout(() => {
+                 area.innerHTML = `<button onclick="completeTask('${taskId}', ${reward}); document.getElementById('task-${taskId}').remove(); showAlert('Reward Added!');" class="px-3 py-1 bg-green-500 text-white text-xs rounded-lg font-bold">Claim</button>`;
+            }, 8000);
+        }
+
+        async function completeTask(taskId, reward) {
+            await runTransaction(db, async (t) => {
+                const userRef = doc(db, "users", userData.tgChatId);
+                const userSnap = await t.get(userRef);
+                const newBalance = (userSnap.data().balance || 0) + parseFloat(reward);
+                t.update(userRef, { balance: newBalance });
+                t.set(doc(collection(db, "task_history")), { userId: userData.tgChatId, taskId: taskId, reward: reward, completedAt: serverTimestamp() });
+            });
+            userData.balance += parseFloat(reward);
+            updateUI();
         }
 
         async function handleAddTask() {
+            const type = document.getElementById('task-type').value;
             const title = document.getElementById('task-title').value;
             const reward = document.getElementById('task-reward').value;
+            const amount = parseFloat(document.getElementById('task-amount').value);
             const link = document.getElementById('task-link').value;
-            if(!title || !reward || !link) return showAlert("Fill all fields");
+            const targetId = document.getElementById('task-target-id').value; // For Telegram Username
+
+            if(!title || !reward || !amount || !link) return showAlert("Fill all fields");
+            if(type === 'telegram' && !targetId) return showAlert("Channel Username required for API check");
+
             loader.style.display = 'flex';
             try {
-                await addDoc(collection(db, "tasks"), { title, reward, link, createdAt: serverTimestamp() });
+                await addDoc(collection(db, "tasks"), { 
+                    type, title, reward, amount, link, targetId, createdAt: serverTimestamp() 
+                });
                 showAlert("Task Added!");
-                ['task-title','task-reward','task-link'].forEach(id => document.getElementById(id).value = '');
+                ['task-title','task-reward','task-amount','task-link','task-target-id'].forEach(id => document.getElementById(id).value = '');
             } catch(e) { showAlert("Error adding task"); }
             finally { loader.style.display = 'none'; }
         }
+        // =============================================================
 
         window.switchMailView = (view) => {
             // Update buttons
@@ -1706,8 +1818,18 @@
                 { name: "Online Chat", iconColor: "bg-orange-100 text-orange-600", icon: "message-square", link: "https://t.me/your_support_user" },
                 { name: "Email Support", iconColor: "bg-gray-100 text-gray-600", icon: "mail", link: "mailto:support@biggerserver.com" }
             ];
-            list.innerHTML = channels.map(c => `<a href="${c.link}" target="_blank" class="support-item group"><div class="flex items-center"><div class="support-icon ${c.iconColor}"><i data-lucide="${c.icon}" class="w-6 h-6"></i></div><span class="font-bold text-sm text-gray-700">${c.name}</span></div><i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 group-hover:text-indigo-500 transition-colors"></i></a>`).join('');
+            list.innerHTML = channels.map(c => `<a href="${c.link}" target="_blank" onclick="handleMenuLinkClick(event)" class="support-item group"><div class="flex items-center"><div class="support-icon ${c.iconColor}"><i data-lucide="${c.icon}" class="w-6 h-6"></i></div><span class="font-bold text-sm text-gray-700">${c.name}</span></div><i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 group-hover:text-indigo-500 transition-colors"></i></a>`).join('');
             lucide.createIcons();
+        }
+        
+        // 8 Seconds Auto Close Logic for Side Menu
+        window.handleMenuLinkClick = (e) => {
+            // Allow link to open naturally
+            // Then close menu after 8s
+            setTimeout(() => {
+                const menu = document.getElementById('slide-out-menu');
+                if(menu.classList.contains('open')) toggleMenu();
+            }, 8000);
         }
 
         function handleFeaturesClick() { navigateTo('features-page'); }
